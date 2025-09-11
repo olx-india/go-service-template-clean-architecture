@@ -45,3 +45,4 @@ dist/
 .env
 
 coverage.out.tmp
+coverage.txt

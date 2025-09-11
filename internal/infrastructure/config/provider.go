@@ -10,7 +10,6 @@ type Provider interface {
 	GetRedisHost() string
 	GetEnv() string
 	GetAppName() string
-	GetNRLicenseKey() string
 }
 
 var _ Provider = (*Config)(nil)
@@ -41,8 +40,4 @@ func (c *Config) GetEnv() string {
 
 func (c *Config) GetAppName() string {
 	return c.Server.AppName
-}
-
-func (c *Config) GetNRLicenseKey() string {
-	return c.Server.NRLicenseKey
 }

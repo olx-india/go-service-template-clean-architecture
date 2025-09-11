@@ -2,49 +2,6 @@
 
 A production-ready Go service template following Clean Architecture principles, designed for microservices with comprehensive infrastructure support.
 
-### Maintainers:
-
-| Manager                | Developer              |
-|------------------------|------------------------|
-| `bhajan.poonia@olx.in` | `parvez.hassan@olx.in` |
-
-### Protected Branches
-
-| Branches  |
-|-----------|
-| `main`    |
-| `develop` |
-
-### Branch Naming Convention
-
-| Value                        | Description                                             |
-|------------------------------|---------------------------------------------------------|
-| `develop`                    | Stable branch to create feature branches from           |
-| `feature/OLXIN-0000-feature` | Feature branch created after an assigned JIRA ticket Id |
-| `release/0.0.0`              | Release candidate for staging sanity                    |
-| `main`                       | Deploy to Production                                    |
-
-### Branch Merge Flow
-
-Normal: `feature/OLXIN-0000-feature` -> `develop` -> `release/0.0.0` -> `main`
-
-Hotfix: `hotfix/OLXIN-000-hot-fix` -> `main`, then take a pull of the changes into `release/0.0.0` & `develop` branches
-
-### CI/CD Pipeline Jobs
-
-| `Stage`           | `Work`                                                                |
-|-------------------|-----------------------------------------------------------------------|
-| `build`           | Uses build tools to create application jar or compile code            |
-| `test`            | Integration of Unit Tests and Integration Tests                       |
-| `quality`         | Stage for running Sonarqube tests and upload reports and score        |
-| `package`         | Create a docker image that can be deployed to the staging environment |
-| `terraform-plan`  | Plan stage to preview infrastructure changes                          |
-| `terraform-apply` | Apply infrastructure changes on the cloud                             |
-| `helm-lint`       | Lint check resources. List changes in resources to be deployed        |
-| `helm-deploy`     | Deploy stage to rollout application changes                           |
-| `helm-rollback`   | Rollback stage in case changes need to be reverted to last stable     |
-| `blank-rollout`   | Restart the last deployed state of the application                    |
-
 ## 🏗️ Architecture
 
 This project implements Clean Architecture with the following layers:
@@ -200,52 +157,8 @@ The application uses environment variables for configuration:
 | `REDIS_HOST` | Redis host | `localhost` |
 | `ENV` | Environment | `local` |
 | `APP_NAME` | Application name | `go-service-template` |
-| `NEW_RELIC_LICENSE_KEY` | New Relic license key | `default-license-key` |
 | `READ_TIMEOUT` | HTTP read timeout | `60s` |
 | `WRITE_TIMEOUT` | HTTP write timeout | `60s` |
-
-## 🏗️ Infrastructure
-
-### Terraform Deployment
-
-The project includes Terraform configurations for AWS infrastructure:
-
-- **RDS Aurora PostgreSQL**: Managed database cluster
-- **ElastiCache Redis**: Managed Redis cluster
-- **Route53**: DNS management
-- **Security Groups**: Network security
-- **IAM Roles**: Access management
-
-#### Deploy Infrastructure
-
-1. **Navigate to terraform directory**
-   ```bash
-   cd terraform
-   ```
-
-2. **Initialize Terraform**
-   ```bash
-   terraform init
-   ```
-
-3. **Plan deployment**
-   ```bash
-   terraform plan -var-file="vars/qa/terraform.tfvars"
-   ```
-
-4. **Apply configuration**
-   ```bash
-   terraform apply -var-file="vars/qa/terraform.tfvars"
-   ```
-
-### Environment-Specific Configuration
-
-The project supports multiple environments:
-- `stg/` - Staging environment
-- `qa/` - QA environment  
-- `prd/` - Production environment
-
-Each environment has its own variable files in the `vars/` directory.
 
 ## 🧪 Testing
 
@@ -284,8 +197,6 @@ make pre-commit
 │   ├── infrastructure/    # External dependencies
 │   └── usecase/           # Business logic
 ├── server/                # Application setup
-├── terraform/             # Infrastructure as code
-├── vars/                  # Environment configurations
 └── docker-compose.yml     # Local development setup
 ```
 
@@ -297,16 +208,6 @@ make pre-commit
 4. **Add routes** in `server/router/`
 5. **Write tests** for all layers
 
-### Database Migrations
-
-```bash
-# Create new migration
-make migrate-create migration_name
-
-# Apply migrations
-make migrate-up
-```
-
 ## 🚀 Deployment
 
 ### Docker
@@ -317,22 +218,6 @@ docker build -t go-service-template .
 # Run container
 docker run -p 8080:8080 go-service-template
 ```
-
-### Kubernetes
-The service is designed to be deployed on Kubernetes with:
-- Health check endpoints for liveness/readiness probes
-- Graceful shutdown handling
-- Configurable resource limits
-- Horizontal Pod Autoscaling support
-
-## 📊 Monitoring
-
-### New Relic Integration
-The service includes New Relic APM integration for:
-- Application performance monitoring
-- Error tracking
-- Custom metrics
-- Distributed tracing
 
 ### Logging
 Structured logging with:

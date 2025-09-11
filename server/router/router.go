@@ -2,19 +2,14 @@ package router
 
 import (
 	"context"
-	"errors"
-	"net/http"
-	"os"
-
 	"go-service-template/internal/api"
 	"go-service-template/internal/infrastructure/config"
 	gincontext "go-service-template/internal/infrastructure/context"
 	"go-service-template/internal/infrastructure/logger"
 	"go-service-template/server/resolver"
+	"net/http"
 
 	"github.com/gin-gonic/gin"
-	nrgin "github.com/newrelic/go-agent/v3/integrations/nrgin"
-	nr "github.com/newrelic/go-agent/v3/newrelic"
 )
 
 type IRouter interface {
@@ -37,15 +32,6 @@ func NewRouter(cfg config.Provider) *Router {
 	}
 
 	router.Use(logger.LoggingMiddleware())
-	newRelicApp, err := InitializeNewRelic(cfg.GetAppName(), cfg.GetNRLicenseKey())
-	if err != nil {
-		logger.Warn(ctx, "Error while initializing New Relic",
-			logger.String("error", err.Error()),
-		)
-	} else {
-		logger.Info(ctx, "New Relic initialized successfully!")
-		router.Use(nrgin.Middleware(newRelicApp))
-	}
 	router.Use(corsMiddleware())
 	return router
 }
@@ -90,26 +76,3 @@ func corsMiddleware() gin.HandlerFunc {
 		c.Next()
 	}
 }
-
-func InitializeNewRelic(appName, license string) (*nr.Application, error) {
-	if appName == "" || license == "" {
-		return nil, ErrInvalidNewRelicConfig
-	}
-
-	return nr.NewApplication(
-		nr.ConfigAppName(appName),
-		nr.ConfigLicense(license),
-		nr.ConfigInfoLogger(os.Stdout),
-		func(config *nr.Config) {
-			config.ErrorCollector.IgnoreStatusCodes = []int{
-				http.StatusBadRequest,
-				http.StatusUnauthorized,
-				http.StatusForbidden,
-				http.StatusNotFound,
-				http.StatusUnprocessableEntity,
-			}
-		},
-	)
-}
-
-var ErrInvalidNewRelicConfig = errors.New("invalid configs for initializing New Relic")

@@ -17,7 +17,6 @@ type ServerConfig struct {
 	ReadTimeout  time.Duration
 	WriteTimeout time.Duration
 	AppName      string
-	NRLicenseKey string
 }
 
 type RedisConfig struct {
@@ -32,7 +31,6 @@ func NewConfig() *Config {
 			ReadTimeout:  getEnvAsDuration(EnvReadTimeout, DefaultReadTimeout),
 			WriteTimeout: getEnvAsDuration(EnvWriteTimeout, DefaultWriteTimeout),
 			AppName:      getEnv(EnvAppName, DefaultAppName),
-			NRLicenseKey: getEnv(EnvNRLicenseKey, DefaultNRLicenseKey),
 		},
 		Redis: RedisConfig{
 			Host: getEnv(EnvRedisHost, DefaultRedisHost),
@@ -65,16 +63,14 @@ const (
 	EnvRedisHost    = "REDIS_HOST"
 	EnvEnvironment  = "ENV"
 	EnvAppName      = "APP_NAME"
-	EnvNRLicenseKey = "NEW_RELIC_LICENSE_KEY"
 
 	DefaultHost         = "0.0.0.0"
 	DefaultPort         = "8080"
 	DefaultReadTimeout  = 60 * time.Second
 	DefaultWriteTimeout = 60 * time.Second
 
-	DefaultRedisHost    = "localhost"
-	DefaultAppName      = "go-service-template"
-	DefaultNRLicenseKey = "default-license-key"
+	DefaultRedisHost = "localhost"
+	DefaultAppName   = "go-service-template"
 
 	DefaultEnv  = "local"
 	EmptyString = ""
