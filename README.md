@@ -18,9 +18,7 @@ This project implements Clean Architecture with the following layers:
 - **Gin Web Framework**: High-performance HTTP web framework
 - **Structured Logging**: Zap-based logging with context propagation
 - **Redis Integration**: Caching and session management
-- **New Relic Monitoring**: Application performance monitoring
 - **Docker Support**: Containerized deployment with multi-stage builds
-- **Terraform Infrastructure**: AWS infrastructure as code
 - **Health Checks**: Kubernetes-ready health endpoints
 - **Comprehensive Testing**: Unit and integration test support
 - **Code Quality**: Linting, formatting, and security scanning
@@ -36,7 +34,6 @@ The Clean Code Blog by Robert C. Martin (Uncle Bob) - https://blog.cleancoder.co
 - Go 1.24.0 or higher
 - Docker and Docker Compose
 - Make
-- Terraform (for infrastructure deployment)
 
 ### Installing Go with GVM (Go Version Manager)
 
