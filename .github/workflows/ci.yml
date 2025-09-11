@@ -1,0 +1,48 @@
+name: CI
+on: pull_request
+
+jobs:
+  golangci-lint:
+    name: runner / golangci-lint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code into the Go module directory
+        uses: actions/checkout@v5
+      - uses: actions/setup-go@v6
+        with:
+          go-version: '1.25'
+          cache: false
+      - name: golangci-lint
+        uses: golangci/golangci-lint-action@v8
+        with:
+          args: --timeout=15m
+
+  check-dependencies:
+    name: runner / check-dependencies
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-go@v6
+        with:
+          go-version: 1.25
+      - name: WriteGoList
+        run: go list -json -m all > go.list
+
+  unit-tests:
+    name: runner / tests / unit
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-go@v6
+        with:
+          go-version: 1.25
+      - name: Unit Tests
+        run: "make test"
+
+  integration-tests:
+    name: runner / tests / integration
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - name: Integration tests
+        run: "make integration-test"
