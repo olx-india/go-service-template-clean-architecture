@@ -18,7 +18,7 @@ require (
 	github.com/newrelic/go-agent/v3 v3.40.1
 	github.com/newrelic/go-agent/v3/integrations/nrgin v1.4.2
 	github.com/redis/go-redis/v9 v9.0.2
-	github.com/stretchr/testify v1.10.0
+	github.com/stretchr/testify v1.11.1
 	go.uber.org/zap v1.27.0
 	gopkg.in/h2non/baloo.v3 v3.1.0
 )
