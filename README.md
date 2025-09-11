@@ -25,6 +25,12 @@ This project implements Clean Architecture with the following layers:
 - **Comprehensive Testing**: Unit and integration test support
 - **Code Quality**: Linting, formatting, and security scanning
 
+## 🧹 About Clean Architecture
+
+The Clean Code Blog by Robert C. Martin (Uncle Bob) - https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html
+
+- ![img.png](img.png)
+
 ## 📋 Prerequisites
 
 - Go 1.24.0 or higher
