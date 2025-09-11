@@ -1,0 +1,33 @@
+version: '3.8'
+
+services:
+  app:
+    build: .
+    ports:
+      - "8080:8080"
+    environment:
+      - REDIS_HOST=redis:6379
+      - NEW_RELIC_APP_NAME=go-service-template
+      - ENV=local-docker
+      - LOG_LEVEL=info
+      - APP_NAME=go-service-template
+    depends_on:
+      - redis
+    networks:
+      - app-network
+
+  redis:
+    image: redis:8-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+    networks:
+      - app-network
+
+volumes:
+  redis-data:
+
+networks:
+  app-network:
+    driver: bridge 
