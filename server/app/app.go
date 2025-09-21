@@ -9,6 +9,8 @@ import (
 	"go-service-template/internal/infrastructure/logger"
 	"go-service-template/server/resolver"
 	"go-service-template/server/router"
+
+	"go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp"
 )
 
 type App struct {
@@ -33,9 +35,11 @@ func (app *App) Start() {
 		logger.String("port", app.config.GetServerPort()),
 	)
 
+	wrappedHandler := otelhttp.NewHandler(r, "http-server")
+
 	server := &http.Server{
 		Addr:         app.config.GetServerHost() + ":" + app.config.GetServerPort(),
-		Handler:      r,
+		Handler:      wrappedHandler,
 		ReadTimeout:  app.config.GetServerReadTimeout(),
 		WriteTimeout: app.config.GetServerWriteTimeout(),
 	}

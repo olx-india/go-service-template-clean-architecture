@@ -6,6 +6,7 @@ import (
 	"os"
 	"strings"
 
+	"go.opentelemetry.io/otel/trace"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 )
@@ -196,6 +197,12 @@ func (l *zapLogger) getRequestID(ctx context.Context) string {
 func (l *zapLogger) getTraceID(ctx context.Context) string {
 	if ctx == nil {
 		return ""
+	}
+
+	// Extract trace ID from OpenTelemetry context
+	span := trace.SpanFromContext(ctx)
+	if span.SpanContext().IsValid() {
+		return span.SpanContext().TraceID().String()
 	}
 
 	// Try to get trace ID from context.
