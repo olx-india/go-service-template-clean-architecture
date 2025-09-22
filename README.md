@@ -134,6 +134,24 @@ The service will be available at `http://localhost:8080`
    make compose-down
    ```
 
+## 📊 OpenTelemetry Integration By **Anurag Kumar**
+
+This service includes OpenTelemetry for distributed tracing and observability.
+
+### Configuration
+
+Add to your `.env` file:
+
+### Local Development
+
+Run Jaeger for trace visualization:
+
+```bash
+docker run -d --name jaeger -p 16686:16686 -p 14250:14250 jaegertracing/all-in-one:latest
+```
+
+Visit `http://localhost:16686` to view traces.
+
 ## 📚 API Documentation
 
 ### Health Check
