@@ -7,10 +7,9 @@ import (
 
 	"go-service-template/internal/infrastructure/config"
 	"go-service-template/internal/infrastructure/logger"
+	"go-service-template/internal/infrastructure/tracer"
 	"go-service-template/server/resolver"
 	"go-service-template/server/router"
-
-	"go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp"
 )
 
 type App struct {
@@ -25,6 +24,10 @@ func NewApp() *App {
 
 func (app *App) Start() {
 	ctx := context.Background()
+
+	shutdown := tracer.InitTracer(ctx, app.config)
+	defer shutdown()
+
 	serverContext := resolver.NewResolver(app.config).ResolveServerContext()
 	r := router.NewRouter(app.config).
 		RegisterRoutes(serverContext).
@@ -35,11 +38,9 @@ func (app *App) Start() {
 		logger.String("port", app.config.GetServerPort()),
 	)
 
-	wrappedHandler := otelhttp.NewHandler(r, "http-server")
-
 	server := &http.Server{
 		Addr:         app.config.GetServerHost() + ":" + app.config.GetServerPort(),
-		Handler:      wrappedHandler,
+		Handler:      r,
 		ReadTimeout:  app.config.GetServerReadTimeout(),
 		WriteTimeout: app.config.GetServerWriteTimeout(),
 	}

@@ -199,10 +199,8 @@ func (l *zapLogger) getTraceID(ctx context.Context) string {
 		return ""
 	}
 
-	// Extract trace ID from OpenTelemetry context
-	span := trace.SpanFromContext(ctx)
-	if span.SpanContext().IsValid() {
-		return span.SpanContext().TraceID().String()
+	if traceID := l.extractTraceIDFromSpan(ctx); traceID != "" {
+		return traceID
 	}
 
 	// Try to get trace ID from context.
@@ -219,6 +217,15 @@ func (l *zapLogger) getTraceID(ctx context.Context) string {
 		return traceID
 	}
 
+	return ""
+}
+
+// extractTraceIDFromSpan retrieves the trace ID from OpenTelemetry span context.
+func (l *zapLogger) extractTraceIDFromSpan(ctx context.Context) string {
+	span := trace.SpanFromContext(ctx)
+	if span.SpanContext().IsValid() {
+		return span.SpanContext().TraceID().String()
+	}
 	return ""
 }
 

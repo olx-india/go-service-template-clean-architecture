@@ -8,6 +8,7 @@ import (
 type Config struct {
 	Server ServerConfig
 	Redis  RedisConfig
+	Tracer TracerConfig
 	Env    string
 }
 
@@ -23,6 +24,10 @@ type RedisConfig struct {
 	Host string
 }
 
+type TracerConfig struct {
+	OTLPEndpoint string
+}
+
 func NewConfig() *Config {
 	return &Config{
 		Server: ServerConfig{
@@ -34,6 +39,9 @@ func NewConfig() *Config {
 		},
 		Redis: RedisConfig{
 			Host: getEnv(EnvRedisHost, DefaultRedisHost),
+		},
+		Tracer: TracerConfig{
+			OTLPEndpoint: getEnv(EnvOTLPEndpoint, DefaultOTLPEndpoint),
 		},
 		Env: getEnv(EnvEnvironment, DefaultEnv),
 	}
@@ -63,14 +71,16 @@ const (
 	EnvRedisHost    = "REDIS_HOST"
 	EnvEnvironment  = "ENV"
 	EnvAppName      = "APP_NAME"
+	EnvOTLPEndpoint = "OTLP_ENDPOINT"
 
 	DefaultHost         = "0.0.0.0"
 	DefaultPort         = "8080"
 	DefaultReadTimeout  = 60 * time.Second
 	DefaultWriteTimeout = 60 * time.Second
 
-	DefaultRedisHost = "localhost"
-	DefaultAppName   = "go-service-template"
+	DefaultRedisHost    = "localhost"
+	DefaultAppName      = "go-service-template"
+	DefaultOTLPEndpoint = "localhost:4317"
 
 	DefaultEnv  = "local"
 	EmptyString = ""

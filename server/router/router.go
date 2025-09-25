@@ -10,6 +10,7 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"go.opentelemetry.io/contrib/instrumentation/github.com/gin-gonic/gin/otelgin"
 )
 
 type IRouter interface {
@@ -31,6 +32,7 @@ func NewRouter(cfg config.Provider) *Router {
 		config: cfg,
 	}
 
+	router.Use(otelgin.Middleware(cfg.GetAppName()))
 	router.Use(logger.LoggingMiddleware())
 	router.Use(corsMiddleware())
 	return router

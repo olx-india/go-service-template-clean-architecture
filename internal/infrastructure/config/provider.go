@@ -10,6 +10,7 @@ type Provider interface {
 	GetRedisHost() string
 	GetEnv() string
 	GetAppName() string
+	GetOTLPEndpoint() string
 }
 
 var _ Provider = (*Config)(nil)
@@ -40,4 +41,8 @@ func (c *Config) GetEnv() string {
 
 func (c *Config) GetAppName() string {
 	return c.Server.AppName
+}
+
+func (c *Config) GetOTLPEndpoint() string {
+	return c.Tracer.OTLPEndpoint
 }
