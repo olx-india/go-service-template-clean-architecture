@@ -15,8 +15,6 @@ require (
 	github.com/evrone/go-clean-template v1.12.5
 	github.com/gin-gonic/gin v1.9.1
 	github.com/google/uuid v1.6.0
-	github.com/newrelic/go-agent/v3 v3.40.1
-	github.com/newrelic/go-agent/v3/integrations/nrgin v1.4.2
 	github.com/redis/go-redis/v9 v9.0.2
 	github.com/stretchr/testify v1.10.0
 	go.uber.org/zap v1.27.0
