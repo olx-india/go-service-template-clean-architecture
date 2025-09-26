@@ -27,7 +27,7 @@ This project implements Clean Architecture with the following layers:
 
 The Clean Code Blog by Robert C. Martin (Uncle Bob) - https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html
 
-- ![img.png](img.png)
+- ![clean-architecture.png](clean-architecture.png)
 
 ## 📋 Prerequisites
 
