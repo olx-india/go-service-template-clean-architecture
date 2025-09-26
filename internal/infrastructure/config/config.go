@@ -17,6 +17,7 @@ type ServerConfig struct {
 	ReadTimeout  time.Duration
 	WriteTimeout time.Duration
 	AppName      string
+	OTLPEndpoint string
 }
 
 type RedisConfig struct {
@@ -31,6 +32,7 @@ func NewConfig() *Config {
 			ReadTimeout:  getEnvAsDuration(EnvReadTimeout, DefaultReadTimeout),
 			WriteTimeout: getEnvAsDuration(EnvWriteTimeout, DefaultWriteTimeout),
 			AppName:      getEnv(EnvAppName, DefaultAppName),
+			OTLPEndpoint: getEnv(EnvOLTPEndpoint, DefaultOTLPEndpoint),
 		},
 		Redis: RedisConfig{
 			Host: getEnv(EnvRedisHost, DefaultRedisHost),
@@ -56,6 +58,10 @@ func getEnvAsDuration(key string, fallback time.Duration) time.Duration {
 }
 
 const (
+	EmptyString = ""
+)
+
+const (
 	EnvHost         = "HOST"
 	EnvPort         = "PORT"
 	EnvReadTimeout  = "READ_TIMEOUT"
@@ -63,15 +69,16 @@ const (
 	EnvRedisHost    = "REDIS_HOST"
 	EnvEnvironment  = "ENV"
 	EnvAppName      = "APP_NAME"
+	EnvOLTPEndpoint = "OTLP_ENDPOINT"
+)
 
+const (
 	DefaultHost         = "0.0.0.0"
 	DefaultPort         = "8080"
 	DefaultReadTimeout  = 60 * time.Second
 	DefaultWriteTimeout = 60 * time.Second
-
-	DefaultRedisHost = "localhost"
-	DefaultAppName   = "go-service-template"
-
-	DefaultEnv  = "local"
-	EmptyString = ""
+	DefaultRedisHost    = "localhost"
+	DefaultAppName      = "go-service-template"
+	DefaultOTLPEndpoint = "localhost:4317"
+	DefaultEnv          = "local"
 )

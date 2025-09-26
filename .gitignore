@@ -46,3 +46,5 @@ dist/
 
 coverage.out.tmp
 coverage.txt
+
+go.list

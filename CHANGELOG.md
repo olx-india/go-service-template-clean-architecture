@@ -12,3 +12,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### To Change
 
 ### To Remove
+
+
+## 1.0.1 - 2026-09-26
+### Added
+- Add Open Telemetry instrumentation to the application
+
+## 1.0.0 - 2026-09-16
+### Added
+- Setup initial project structure with Clean Architecture for Go services

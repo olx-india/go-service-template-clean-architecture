@@ -3,12 +3,14 @@ package app
 import (
 	"context"
 	"net/http"
-	"os"
 
 	"go-service-template/internal/infrastructure/config"
 	"go-service-template/internal/infrastructure/logger"
 	"go-service-template/server/resolver"
-	"go-service-template/server/router"
+	routerPkg "go-service-template/server/router"
+	"go-service-template/server/telemetry"
+
+	"github.com/gin-gonic/gin"
 )
 
 type App struct {
@@ -23,10 +25,11 @@ func NewApp() *App {
 
 func (app *App) Start() {
 	ctx := context.Background()
+	shutdown := telemetry.InitTracer(ctx, app.config)
+	defer shutdown()
+
 	serverContext := resolver.NewResolver(app.config).ResolveServerContext()
-	r := router.NewRouter(app.config).
-		RegisterRoutes(serverContext).
-		Get()
+	router := app.createRouterAndRegisterRoutes(serverContext)
 
 	logger.Info(ctx, "Starting HTTP server",
 		logger.String("host", app.config.GetServerHost()),
@@ -35,7 +38,7 @@ func (app *App) Start() {
 
 	server := &http.Server{
 		Addr:         app.config.GetServerHost() + ":" + app.config.GetServerPort(),
-		Handler:      r,
+		Handler:      router,
 		ReadTimeout:  app.config.GetServerReadTimeout(),
 		WriteTimeout: app.config.GetServerWriteTimeout(),
 	}
@@ -46,5 +49,11 @@ func (app *App) Start() {
 			logger.String("error", err.Error()),
 		)
 	}
-	os.Exit(0)
+}
+
+func (app *App) createRouterAndRegisterRoutes(serverContext *resolver.ServerContext) *gin.Engine {
+	r := routerPkg.NewRouter(app.config).
+		RegisterRoutes(serverContext).
+		Get()
+	return r
 }
