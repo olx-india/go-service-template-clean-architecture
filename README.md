@@ -189,6 +189,32 @@ make format
 make pre-commit
 ```
 
+### Mockery Integration
+
+This service includes Testify and Mockery for mocking interfaces.
+
+#### Installation and Configuration
+
+```bash
+  go install github.com/vektra/mockery/v3@v3.5.5
+  # check version
+  mockery version
+```
+or through homebrew
+```bash
+  brew install mockery
+```
+
+#### Usage
+
+To generate mocks for all the interfaces.
+
+```bash
+  mockery
+```
+
+Note — please refer to the [Mockery Documentation](https://vektra.github.io/mockery/latest/installation/) for more information and specific configurations.
+
 ## 📦 Development
 
 ### Project Structure
