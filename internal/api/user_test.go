@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 	"errors"
 	"go-service-template/internal/domain/user"
+	"go-service-template/internal/usecase/user/mocks"
 	"net/http"
 	"net/http/httptest"
 	"testing"
@@ -19,22 +20,8 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-type MockUserUseCase struct {
-	mock.Mock
-}
-
-func (m *MockUserUseCase) CreateUserRequest(req *dto.CreateUserRequest) (*user.User, error) {
-	args := m.Called(req)
-	return args.Get(0).(*user.User), args.Error(1)
-}
-
-func (m *MockUserUseCase) FetchUser(req *dto.FetchUserRequest) (*user.User, error) {
-	args := m.Called(req)
-	return args.Get(0).(*user.User), args.Error(1)
-}
-
 func TestNewUserHandler_ValidInput_ReturnsUserHandler(t *testing.T) {
-	mockUseCase := &MockUserUseCase{}
+	mockUseCase := &mocks.IUserUseCase{}
 	handler := NewUserHandler(mockUseCase)
 
 	assert.NotNil(t, handler)
@@ -57,8 +44,8 @@ func TestUserHandler_CreateUser_ValidRequest_ReturnsCreatedResponse(t *testing.T
 	mockUseCase.AssertExpectations(t)
 }
 
-func mockCreateUserUsecase(requestBody dto.CreateUserRequest) (*MockUserUseCase, IUserHandler, *user.User) {
-	mockUseCase := &MockUserUseCase{}
+func mockCreateUserUsecase(requestBody dto.CreateUserRequest) (*mocks.IUserUseCase, IUserHandler, *user.User) {
+	mockUseCase := &mocks.IUserUseCase{}
 	handler := NewUserHandler(mockUseCase)
 	expectedUser := user.CreateNewUser(requestBody)
 	mockUseCase.On("CreateUserRequest", mock.AnythingOfType("*dto.CreateUserRequest")).Return(expectedUser, nil)
@@ -114,7 +101,7 @@ func TestUserHandler_CreateUser_InvalidJSON_ReturnsBadRequest(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			mockUseCase := &MockUserUseCase{}
+			mockUseCase := &mocks.IUserUseCase{}
 			handler := NewUserHandler(mockUseCase)
 
 			w, ginCtx := setupUserTestContextWithRawJSON(t, tt.requestBody)
@@ -158,7 +145,7 @@ func TestUserHandler_CreateUser_UseCaseError_ReturnsInternalServerError(t *testi
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			mockUseCase := &MockUserUseCase{}
+			mockUseCase := &mocks.IUserUseCase{}
 			handler := NewUserHandler(mockUseCase)
 
 			mockUseCase.On("CreateUserRequest", mock.AnythingOfType("*dto.CreateUserRequest")).Return((*user.User)(nil), tt.useCaseError)
@@ -256,7 +243,7 @@ func TestUserHandler_CreateUser_ValidUserData_ReturnsSuccessResponse(t *testing.
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			mockUseCase := &MockUserUseCase{}
+			mockUseCase := &mocks.IUserUseCase{}
 			handler := NewUserHandler(mockUseCase)
 
 			expectedUser := user.CreateNewUser(dto.CreateUserRequest{
@@ -284,7 +271,7 @@ func TestUserHandler_CreateUser_ValidUserData_ReturnsSuccessResponse(t *testing.
 }
 
 func TestUserHandler_FetchUser_ValidRequest_ReturnsOKResponse(t *testing.T) {
-	mockUseCase := &MockUserUseCase{}
+	mockUseCase := &mocks.IUserUseCase{}
 	handler := NewUserHandler(mockUseCase)
 
 	expectedResponse := map[string]interface{}{
@@ -347,7 +334,7 @@ func TestUserHandler_FetchUser_InvalidJSON_ReturnsBadRequest(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			mockUseCase := &MockUserUseCase{}
+			mockUseCase := &mocks.IUserUseCase{}
 			handler := NewUserHandler(mockUseCase)
 
 			w, ginCtx := setupUserTestContextWithRawJSON(t, tt.requestBody)
@@ -391,7 +378,7 @@ func TestUserHandler_FetchUser_UseCaseError_ReturnsInternalServerError(t *testin
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			mockUseCase := &MockUserUseCase{}
+			mockUseCase := &mocks.IUserUseCase{}
 			handler := NewUserHandler(mockUseCase)
 
 			mockUseCase.On("FetchUser", mock.AnythingOfType("*dto.FetchUserRequest")).Return((*user.User)(nil), tt.useCaseError)
@@ -454,7 +441,7 @@ func TestUserHandler_FetchUser_ValidUserIDs_ReturnsSuccessResponse(t *testing.T)
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			mockUseCase := &MockUserUseCase{}
+			mockUseCase := &mocks.IUserUseCase{}
 			handler := NewUserHandler(mockUseCase)
 
 			expectedUser := user.CreateNewUser(dto.CreateUserRequest{
