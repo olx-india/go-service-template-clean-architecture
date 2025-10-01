@@ -5,11 +5,12 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"github.com/gin-gonic/gin"
-	"github.com/stretchr/testify/assert"
 	"go-service-template/internal/infrastructure/config"
 	gincontext "go-service-template/internal/infrastructure/context"
 	"go-service-template/server/resolver"
+
+	"github.com/gin-gonic/gin"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestCORSHeaders_Options_NoContent(t *testing.T) {
