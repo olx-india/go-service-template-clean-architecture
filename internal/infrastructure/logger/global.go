@@ -2,19 +2,29 @@ package logger
 
 import (
 	"context"
+	"sync"
 )
 
-// InitGlobalLogger initializes the global logger instance.
-// This function is kept for backward compatibility but doesn't do anything
-// since we now create logger instances on demand.
+var (
+	globalLogger Logger
+	globalOnce   sync.Once
+)
+
+// InitGlobalLogger initializes the global logger singleton.
+// Safe to call from main or tests; subsequent calls are no-ops.
 func InitGlobalLogger() {
-	// No-op: logger instances are created on demand
+	globalOnce.Do(func() {
+		globalLogger = NewLogger(serviceName)
+	})
 }
 
-// GetGlobalLogger returns a new logger instance.
-// This replaces the global logger pattern to avoid global variables.
+// GetGlobalLogger returns the global logger singleton, lazily initialising it on first use
+// if InitGlobalLogger was not called earlier.
 func GetGlobalLogger() Logger {
-	return NewLogger(serviceName)
+	globalOnce.Do(func() {
+		globalLogger = NewLogger(serviceName)
+	})
+	return globalLogger
 }
 
 // Info Global logging functions for convenience.
