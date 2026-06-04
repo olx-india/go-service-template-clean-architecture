@@ -31,19 +31,6 @@ jobs:
       - name: Run tests
         run: make test
 
-  govulncheck:
-    name: govulncheck
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v6
-      - uses: actions/setup-go@v6
-        with:
-          go-version: '1.24.6'
-      - name: Install govulncheck
-        run: go install golang.org/x/vuln/cmd/govulncheck@latest
-      - name: Run govulncheck
-        run: govulncheck ./...
-
   docker-build:
     name: docker-build
     runs-on: ubuntu-latest

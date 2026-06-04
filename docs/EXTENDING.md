@@ -42,4 +42,4 @@ This scaffold intentionally omits several production concerns. Add them in your 
 
 - Restrict CORS origins (currently `*` for local dev)
 - Add request size limits and security headers middleware
-- Run `govulncheck` and CodeQL in CI (already included here)
+- Run `govulncheck` locally (`make vuln`) and enable GitHub Code scanning (default setup) in repository settings
