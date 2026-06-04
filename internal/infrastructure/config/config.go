@@ -18,6 +18,7 @@ type ServerConfig struct {
 	WriteTimeout time.Duration
 	AppName      string
 	OTLPEndpoint string
+	OTELEnabled  bool
 }
 
 type RedisConfig struct {
@@ -33,6 +34,7 @@ func NewConfig() *Config {
 			WriteTimeout: getEnvAsDuration(EnvWriteTimeout, DefaultWriteTimeout),
 			AppName:      getEnv(EnvAppName, DefaultAppName),
 			OTLPEndpoint: getEnv(EnvOLTPEndpoint, DefaultOTLPEndpoint),
+			OTELEnabled:  getEnvAsBool(EnvOTELEnabled, DefaultOTELEnabled),
 		},
 		Redis: RedisConfig{
 			Host: getEnv(EnvRedisHost, DefaultRedisHost),
@@ -57,6 +59,13 @@ func getEnvAsDuration(key string, fallback time.Duration) time.Duration {
 	return fallback
 }
 
+func getEnvAsBool(key string, fallback bool) bool {
+	if value := os.Getenv(key); value != EmptyString {
+		return value == "true" || value == "1"
+	}
+	return fallback
+}
+
 const (
 	EmptyString = ""
 )
@@ -70,6 +79,7 @@ const (
 	EnvEnvironment  = "ENV"
 	EnvAppName      = "APP_NAME"
 	EnvOLTPEndpoint = "OTLP_ENDPOINT"
+	EnvOTELEnabled  = "OTEL_ENABLED"
 )
 
 const (
@@ -80,5 +90,6 @@ const (
 	DefaultRedisHost    = "localhost"
 	DefaultAppName      = "go-service-template"
 	DefaultOTLPEndpoint = "localhost:4317"
+	DefaultOTELEnabled  = false
 	DefaultEnv          = "local"
 )

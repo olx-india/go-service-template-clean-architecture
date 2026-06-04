@@ -1,7 +1,6 @@
 package user
 
-import "go-service-template/internal/api/dto"
-
+// User represents a domain user entity.
 type User struct {
 	ID    int    `json:"id"`
 	Name  string `json:"name"`
@@ -9,11 +8,20 @@ type User struct {
 	Age   int    `json:"age"`
 }
 
-func CreateNewUser(request dto.CreateUserRequest) *User {
+// CreateUserInput holds domain input for creating a user.
+type CreateUserInput struct {
+	ID    int
+	Name  string
+	Email string
+	Age   int
+}
+
+// NewUser builds a domain user from input parameters.
+func NewUser(input CreateUserInput) *User {
 	return &User{
-		ID:    request.ID,
-		Name:  request.Name,
-		Email: request.Email,
-		Age:   request.Age,
+		ID:    input.ID,
+		Name:  input.Name,
+		Email: input.Email,
+		Age:   input.Age,
 	}
 }

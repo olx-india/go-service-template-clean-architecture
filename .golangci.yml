@@ -96,7 +96,7 @@ linters:
       - linters:
           - godot
           - paralleltest
-        path: integration-test
+        path: integrationtests
       - linters:
           - godot
         path: internal/controller/http

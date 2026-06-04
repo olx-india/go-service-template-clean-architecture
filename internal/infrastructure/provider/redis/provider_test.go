@@ -16,8 +16,8 @@ func (f fakeCfg) GetServerWriteTimeout() time.Duration { return 0 }
 func (f fakeCfg) GetRedisHost() string                 { return f.host }
 func (f fakeCfg) GetEnv() string                       { return "" }
 func (f fakeCfg) GetAppName() string                   { return "" }
-func (f fakeCfg) GetNRLicenseKey() string              { return "" }
 func (f fakeCfg) GetOTLPEndpoint() string              { return "" }
+func (f fakeCfg) GetOTELEnabled() bool                 { return false }
 
 func TestNewProvider_InvalidHost_ReturnsError(t *testing.T) {
 	cfg := fakeCfg{host: "127.0.0.1:0"}

@@ -5,6 +5,7 @@ import (
 	"log"
 
 	"go-service-template/internal/infrastructure/config"
+	"go-service-template/internal/infrastructure/logger"
 
 	"go.opentelemetry.io/otel"
 	"go.opentelemetry.io/otel/exporters/otlp/otlptrace"
@@ -26,6 +27,11 @@ type TracerBuilder struct {
 }
 
 func InitTracer(ctx context.Context, cfg config.Provider) func() {
+	if !cfg.GetOTELEnabled() {
+		logger.Info(ctx, "OpenTelemetry disabled; set OTEL_ENABLED=true to enable tracing")
+		return func() {}
+	}
+
 	return (&TracerBuilder{}).
 		createTelemetryExporter(ctx, cfg.GetOTLPEndpoint()).
 		createApplicationResource(ctx, cfg).
@@ -43,10 +49,13 @@ func (tb *TracerBuilder) createTelemetryExporter(ctx context.Context, endpoint s
 		otlptracegrpc.WithEndpoint(endpoint),
 	)
 	if err != nil {
-		log.Fatalf("failed to create trace exporter: %v", err)
+		logger.Error(ctx, "Failed to create trace exporter; continuing without tracing",
+			logger.String("error", err.Error()),
+		)
+		tb.err = err
+		return tb
 	}
 	tb.exporter = exp
-	tb.err = err
 	return tb
 }
 
@@ -59,7 +68,11 @@ func (tb *TracerBuilder) createApplicationResource(ctx context.Context, cfg conf
 	tb.cfg = cfg
 	res, err := createResource(ctx, cfg)
 	if err != nil {
-		log.Fatalf("failed to create resource: %v", err)
+		logger.Error(ctx, "Failed to create OpenTelemetry resource; continuing without tracing",
+			logger.String("error", err.Error()),
+		)
+		tb.err = err
+		return tb
 	}
 	tb.resource = res
 	return tb
@@ -103,6 +116,10 @@ func (tb *TracerBuilder) setTextMapPropagator() *TracerBuilder {
 
 // shutdownFunction returns the shutdown function.
 func (tb *TracerBuilder) shutdownFunction() func() {
+	if tb.existError() || tb.tp == nil {
+		return func() {}
+	}
+
 	return func() {
 		if err := tb.tp.Shutdown(tb.ctx); err != nil {
 			log.Printf("error shutting down tracer provider: %v", err)

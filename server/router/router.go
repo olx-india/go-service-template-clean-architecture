@@ -32,6 +32,7 @@ func NewRouter(cfg config.Provider) *Router {
 		config: cfg,
 	}
 
+	router.Use(gin.Recovery())
 	router.Use(logger.LoggingMiddleware())
 	router.Use(otelgin.Middleware(cfg.GetAppName()))
 	router.Use(corsMiddleware())
@@ -39,8 +40,10 @@ func NewRouter(cfg config.Provider) *Router {
 }
 
 func (r *Router) RegisterRoutes(serverContext *resolver.ServerContext) *Router {
-	healthHandler := api.NewHealthHandler()
+	healthHandler := api.NewHealthHandler(r.config, serverContext.RedisProvider)
 	r.GET("/health", WrapContext(healthHandler.Check))
+	r.GET("/live", WrapContext(healthHandler.Live))
+	r.GET("/ready", WrapContext(healthHandler.Ready))
 	r.POST("/api/v1/limit/check", WrapContext(serverContext.LimiterHandler.CheckLimit))
 	r.POST("/api/v1/limit/reset", WrapContext(serverContext.LimiterHandler.ResetLimit))
 	r.POST("/api/v1/user", WrapContext(serverContext.UserHandler.CreateUser))

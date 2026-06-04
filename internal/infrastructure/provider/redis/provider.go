@@ -2,6 +2,7 @@ package redis
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"time"
 
@@ -38,6 +39,14 @@ func NewProvider(cfg config.Provider) (*Provider, error) {
 	}, nil
 }
 
+func (p *Provider) Ping(ctx context.Context) error {
+	if p == nil || p.client == nil {
+		return errRedisNotConfigured
+	}
+
+	return p.client.Ping(ctx).Err()
+}
+
 func (p *Provider) GetClient() *redis.Client {
 	return p.client
 }
@@ -50,3 +59,5 @@ const (
 	contextTimeout = 5 * time.Second
 	poolSize       = 10
 )
+
+var errRedisNotConfigured = errors.New("redis client is not configured")

@@ -9,6 +9,7 @@ import (
 	"go-service-template/internal/usecase/user/mocks"
 	"net/http"
 	"net/http/httptest"
+	"strconv"
 	"testing"
 
 	"go-service-template/internal/api/dto"
@@ -47,7 +48,12 @@ func TestUserHandler_CreateUser_ValidRequest_ReturnsCreatedResponse(t *testing.T
 func mockCreateUserUsecase(requestBody dto.CreateUserRequest) (*mocks.IUserUseCase, IUserHandler, *user.User) {
 	mockUseCase := &mocks.IUserUseCase{}
 	handler := NewUserHandler(mockUseCase)
-	expectedUser := user.CreateNewUser(requestBody)
+	expectedUser := user.NewUser(user.CreateUserInput{
+		ID:    requestBody.ID,
+		Name:  requestBody.Name,
+		Email: requestBody.Email,
+		Age:   requestBody.Age,
+	})
 	mockUseCase.On("CreateUserRequest", mock.AnythingOfType("*dto.CreateUserRequest")).Return(expectedUser, nil)
 	return mockUseCase, handler, expectedUser
 }
@@ -246,7 +252,7 @@ func TestUserHandler_CreateUser_ValidUserData_ReturnsSuccessResponse(t *testing.
 			mockUseCase := &mocks.IUserUseCase{}
 			handler := NewUserHandler(mockUseCase)
 
-			expectedUser := user.CreateNewUser(dto.CreateUserRequest{
+			expectedUser := user.NewUser(user.CreateUserInput{
 				ID:    int(tt.expectedResponse["id"].(float64)),
 				Name:  tt.expectedResponse["name"].(string),
 				Email: tt.expectedResponse["email"].(string),
@@ -281,7 +287,7 @@ func TestUserHandler_FetchUser_ValidRequest_ReturnsOKResponse(t *testing.T) {
 		"age":   float64(30),
 	}
 
-	expectedUser := user.CreateNewUser(dto.CreateUserRequest{
+	expectedUser := user.NewUser(user.CreateUserInput{
 		ID:    int(expectedResponse["id"].(float64)),
 		Name:  expectedResponse["name"].(string),
 		Email: expectedResponse["email"].(string),
@@ -289,8 +295,7 @@ func TestUserHandler_FetchUser_ValidRequest_ReturnsOKResponse(t *testing.T) {
 	})
 	mockUseCase.On("FetchUser", mock.AnythingOfType("*dto.FetchUserRequest")).Return(expectedUser, nil)
 
-	requestBody := dto.FetchUserRequest{ID: 123}
-	w, ginCtx := setupUserTestContextWithJSON(t, requestBody)
+	w, ginCtx := setupUserTestContextWithParam(t, "123")
 
 	handler.FetchUser(ginCtx)
 
@@ -304,31 +309,21 @@ func TestUserHandler_FetchUser_ValidRequest_ReturnsOKResponse(t *testing.T) {
 	mockUseCase.AssertExpectations(t)
 }
 
-func TestUserHandler_FetchUser_InvalidJSON_ReturnsBadRequest(t *testing.T) {
+func TestUserHandler_FetchUser_InvalidID_ReturnsBadRequest(t *testing.T) {
 	tests := []struct {
-		name        string
-		requestBody string
-		errorMsg    string
+		name    string
+		userID  string
+		errorMsg string
 	}{
 		{
-			name:        "InvalidIDType",
-			requestBody: `{"id": "invalid"}`,
-			errorMsg:    "Invalid request body",
+			name:     "InvalidIDType",
+			userID:   "invalid",
+			errorMsg: "Invalid user ID",
 		},
 		{
-			name:        "MissingID",
-			requestBody: `{}`,
-			errorMsg:    "Invalid request body",
-		},
-		{
-			name:        "EmptyRequestBody",
-			requestBody: ``,
-			errorMsg:    "Invalid request body",
-		},
-		{
-			name:        "MalformedJSON",
-			requestBody: `{"id": 123,}`,
-			errorMsg:    "Invalid request body",
+			name:     "EmptyID",
+			userID:   "",
+			errorMsg: "Invalid user ID",
 		},
 	}
 
@@ -337,7 +332,7 @@ func TestUserHandler_FetchUser_InvalidJSON_ReturnsBadRequest(t *testing.T) {
 			mockUseCase := &mocks.IUserUseCase{}
 			handler := NewUserHandler(mockUseCase)
 
-			w, ginCtx := setupUserTestContextWithRawJSON(t, tt.requestBody)
+			w, ginCtx := setupUserTestContextWithParam(t, tt.userID)
 
 			handler.FetchUser(ginCtx)
 
@@ -383,8 +378,7 @@ func TestUserHandler_FetchUser_UseCaseError_ReturnsInternalServerError(t *testin
 
 			mockUseCase.On("FetchUser", mock.AnythingOfType("*dto.FetchUserRequest")).Return((*user.User)(nil), tt.useCaseError)
 
-			requestBody := dto.FetchUserRequest{ID: 123}
-			w, ginCtx := setupUserTestContextWithJSON(t, requestBody)
+			w, ginCtx := setupUserTestContextWithParam(t, "123")
 
 			handler.FetchUser(ginCtx)
 
@@ -444,7 +438,7 @@ func TestUserHandler_FetchUser_ValidUserIDs_ReturnsSuccessResponse(t *testing.T)
 			mockUseCase := &mocks.IUserUseCase{}
 			handler := NewUserHandler(mockUseCase)
 
-			expectedUser := user.CreateNewUser(dto.CreateUserRequest{
+			expectedUser := user.NewUser(user.CreateUserInput{
 				ID:    int(tt.expectedResponse["id"].(float64)),
 				Name:  tt.expectedResponse["name"].(string),
 				Email: tt.expectedResponse["email"].(string),
@@ -452,8 +446,7 @@ func TestUserHandler_FetchUser_ValidUserIDs_ReturnsSuccessResponse(t *testing.T)
 			})
 			mockUseCase.On("FetchUser", mock.AnythingOfType("*dto.FetchUserRequest")).Return(expectedUser, nil)
 
-			requestBody := dto.FetchUserRequest{ID: tt.userID}
-			w, ginCtx := setupUserTestContextWithJSON(t, requestBody)
+			w, ginCtx := setupUserTestContextWithParam(t, strconv.Itoa(tt.userID))
 
 			handler.FetchUser(ginCtx)
 
@@ -481,6 +474,23 @@ func setupUserTestContextWithJSON(t *testing.T, requestBody interface{}) (*httpt
 	req, err := http.NewRequestWithContext(context.Background(), http.MethodPost, "/users", bytes.NewBuffer(jsonBody))
 	require.NoError(t, err)
 	req.Header.Set("Content-Type", "application/json")
+	c.Request = req
+
+	ginCtx, err := ginContext.NewGinContext(c)
+	require.NoError(t, err)
+
+	return w, ginCtx
+}
+
+func setupUserTestContextWithParam(t *testing.T, userID string) (*httptest.ResponseRecorder, *ginContext.GinContext) {
+	gin.SetMode(gin.TestMode)
+
+	w := httptest.NewRecorder()
+	c, _ := gin.CreateTestContext(w)
+	c.Params = gin.Params{{Key: "id", Value: userID}}
+
+	req, err := http.NewRequestWithContext(context.Background(), http.MethodGet, "/api/v1/user/"+userID, nil)
+	require.NoError(t, err)
 	c.Request = req
 
 	ginCtx, err := ginContext.NewGinContext(c)

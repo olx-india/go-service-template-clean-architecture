@@ -14,8 +14,14 @@ func TestNewLogger_NotNil(t *testing.T) {
 }
 
 func TestGlobalLogger_NotNil(t *testing.T) {
-    l := GetGlobalLogger()
-    assert.NotNil(t, l)
+	l := GetGlobalLogger()
+	assert.NotNil(t, l)
+}
+
+func TestGetGlobalLogger_ReturnsSameInstance(t *testing.T) {
+	l1 := GetGlobalLogger()
+	l2 := GetGlobalLogger()
+	assert.Same(t, l1, l2)
 }
 
 func TestBuildZapFields_IncludesRequestIDOrTraceID(t *testing.T) {

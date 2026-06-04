@@ -1,28 +1,26 @@
 package persistent
 
 import (
-	"github.com/evrone/go-clean-template/pkg/postgres"
-
 	"go-service-template/internal/domain/user"
 	"go-service-template/internal/infrastructure/repo"
 )
 
-// UserRepoImpl -.
+// userRepo is a stub repository. Replace with your database implementation.
 type userRepo struct {
-	*postgres.Postgres
+	// Adopter: inject your database connection here.
 }
 
-// NewUserRepo -.
-func NewUserRepo(pg *postgres.Postgres) repo.UserRepo {
-	return &userRepo{pg}
+// NewUserRepo creates a stub user repository.
+func NewUserRepo() repo.UserRepo {
+	return &userRepo{}
 }
 
-// Fetch -.
+// Fetch returns a stub user. Implement your query logic here.
 func (r *userRepo) Fetch(_ int) (user.User, error) {
 	return user.User{}, nil
 }
 
-// Save -.
+// Save persists a stub user. Implement your save logic here.
 func (r *userRepo) Save(_ user.User) (user.User, error) {
 	return user.User{}, nil
 }

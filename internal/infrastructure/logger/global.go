@@ -5,21 +5,29 @@ import (
 	"sync"
 )
 
-//nolint:gochecknoglobals // Lazy singleton for package-level logger API; sync.OnceValue must be shared across calls.
-var globalLoggerFn = sync.OnceValue(func() Logger {
-	return NewLogger(serviceName)
-})
+var (
+	//nolint:gochecknoglobals // Process-wide logger singleton shared by package-level helpers.
+	globalLogger Logger
+	globalOnce   sync.Once //nolint:gochecknoglobals // guards one-time logger initialization
+)
+
+func initGlobalLogger() {
+	globalOnce.Do(func() {
+		globalLogger = NewLogger(serviceName)
+	})
+}
 
 // InitGlobalLogger initializes the global logger singleton.
 // Safe to call from main or tests; subsequent calls are no-ops.
 func InitGlobalLogger() {
-	_ = globalLoggerFn()
+	initGlobalLogger()
 }
 
 // GetGlobalLogger returns the global logger singleton, lazily initializing it on first use
 // if InitGlobalLogger was not called earlier.
 func GetGlobalLogger() Logger {
-	return globalLoggerFn()
+	initGlobalLogger()
+	return globalLogger
 }
 
 // Info Global logging functions for convenience.

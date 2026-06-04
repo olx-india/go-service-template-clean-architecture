@@ -11,6 +11,7 @@ services:
       - ENV=local-docker
       - LOG_LEVEL=info
       - APP_NAME=go-service-template
+      - OTEL_ENABLED=true
       - OTLP_ENDPOINT=jaeger:4317
     depends_on:
       - redis

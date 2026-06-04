@@ -11,6 +11,7 @@ type Provider interface {
 	GetEnv() string
 	GetAppName() string
 	GetOTLPEndpoint() string
+	GetOTELEnabled() bool
 }
 
 var _ Provider = (*Config)(nil)
@@ -45,4 +46,8 @@ func (c *Config) GetAppName() string {
 
 func (c *Config) GetOTLPEndpoint() string {
 	return c.Server.OTLPEndpoint
+}
+
+func (c *Config) GetOTELEnabled() bool {
+	return c.Server.OTELEnabled
 }

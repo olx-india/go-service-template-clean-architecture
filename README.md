@@ -1,147 +1,102 @@
-# Go Service Template—Clean Architecture
+# Go Service Template — Clean Architecture
 
-A production-ready Go service template following Clean Architecture principles, designed for microservices with comprehensive infrastructure support.
+[![CI](https://github.com/olx-india/go-service-template-clean-architecture/actions/workflows/ci.yml/badge.svg)](https://github.com/olx-india/go-service-template-clean-architecture/actions/workflows/ci.yml)
+[![Go Version](https://img.shields.io/badge/go-1.24.6-blue.svg)](https://golang.org/dl/)
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE)
 
-## 🏗️ Architecture
+An opinionated Go service **scaffold** following Clean Architecture. It provides layered structure, dependency injection, logging, optional OpenTelemetry, and sample HTTP endpoints with clear extension points—not a full production product.
 
-This project implements Clean Architecture with the following layers:
+## What is included vs what you add
 
-- **Domain Layer** (`internal/domain/`): Core business entities and rules
-- **Use Case Layer** (`internal/usecase/`): Application business logic
-- **Infrastructure Layer** (`internal/infrastructure/`): External concerns (config, logging, repositories)
-- **API Layer** (`internal/api/`): HTTP handlers and DTOs
-- **Server Layer** (`server/`): Application setup and routing
+| Included (wired) | You add in your fork |
+|------------------|----------------------|
+| Clean Architecture layers + DI resolver | Business logic in use cases |
+| Gin HTTP server with graceful shutdown | Database / migrations |
+| Structured logging (Zap) + request IDs | Auth, metrics, OpenAPI |
+| Optional OTLP tracing (`OTEL_ENABLED`) | Deployment manifests |
+| Redis client + readiness probe | Rate limiting logic |
+| Sample user + limit endpoints (stubs) | Your domain features |
+| Unit + integration tests, linting, CI | |
 
-## 🚀 Features
+Sample endpoints demonstrate **handler → use case → repository** wiring. Business logic is intentionally minimal—implement your domain in the use case layer.
 
-- **Clean Architecture**: Separation of concerns with dependency inversion
-- **Gin Web Framework**: High-performance HTTP web framework
-- **Structured Logging**: Zap-based logging with context propagation
-- **Redis Integration**: Caching and session management
-- **Docker Support**: Containerized deployment with multi-stage builds
-- **Health Checks**: Kubernetes-ready health endpoints
-- **Comprehensive Testing**: Unit and integration test support
-- **Code Quality**: Linting, formatting, and security scanning
+## Architecture
 
-## 🧹 About Clean Architecture
+```mermaid
+flowchart TB
+    cmd[cmd/main.go] --> app[server/app]
+    app --> resolver[server/resolver]
+    app --> router[server/router]
+    router --> api[internal/api]
+    resolver --> api
+    resolver --> usecase[internal/usecase]
+    resolver --> infra[internal/infrastructure]
+    api --> usecase
+    usecase --> domain[internal/domain]
+    usecase --> repo[internal/infrastructure/repo]
+```
 
-The Clean Code Blog by Robert C. Martin (Uncle Bob) - https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html
+Layers:
 
-- ![clean-architecture.png](clean-architecture.png)
+- **Domain** (`internal/domain/`) — entities and domain rules (no HTTP/DB imports)
+- **Use case** (`internal/usecase/`) — application logic
+- **Infrastructure** (`internal/infrastructure/`) — config, logging, Redis, repositories
+- **API** (`internal/api/`) — HTTP handlers and DTOs
+- **Server** (`server/`) — app lifecycle, routing, telemetry
 
-## 📋 Prerequisites
+See [docs/adr/001-clean-architecture-layers.md](docs/adr/001-clean-architecture-layers.md) for design rationale.
 
-- Go 1.24.0 or higher
-- Docker and Docker Compose
+## Prerequisites
+
+- Go 1.24.6+
+- Docker and Docker Compose (for local stack)
 - Make
 
-### Installing Go with GVM (Go Version Manager)
+## Quick start
 
-GVM allows you to easily install and manage multiple Go versions. Here's how to set it up:
+### Use this template
 
-#### 1. Install GVM
+1. Click **Use this template** on GitHub to create your repository.
+2. Follow [docs/CUSTOMIZING.md](docs/CUSTOMIZING.md) to rename the module and strip sample features.
 
-**On macOS:**
-```bash
-# Install GVM
-bash < <(curl -s -S -L https://raw.githubusercontent.com/moovweb/gvm/master/binscripts/gvm-installer)
-
-# Add GVM to your shell profile
-echo '[[ -s "$HOME/.gvm/scripts/gvm" ]] && source "$HOME/.gvm/scripts/gvm"' >> ~/.zshrc
-source ~/.zshrc
-```
-
-#### 2. Install Go 1.24.0
+### Local development
 
 ```bash
-# Install Go 1.24.0
-gvm install go1.24.0
+git clone git@github.com:olx-india/go-service-template-clean-architecture.git
+cd go-service-template-clean-architecture
 
-# Use Go 1.24.0 as default
-gvm use go1.24.0 --default
-
-# Verify installation
-go version
+make deps
+cp .env.example .env
+make run
 ```
 
-#### 3. GVM Commands Reference
+Service: `http://localhost:8080`
+
+### Docker Compose (app + Redis + Jaeger)
 
 ```bash
-# List available Go versions
-gvm listall
-
-# Install a specific Go version
-gvm install go1.23.0
-
-# Switch to a different Go version
-gvm use go1.23.0
-
-# Set a Go version as default
-gvm use go1.24.0 --default
-
-# List installed Go versions
-gvm list
-
-# Uninstall a Go version
-gvm uninstall go1.23.0
+make compose-up    # start stack
+make compose-down  # stop stack
 ```
 
-#### Alternative: Direct Go Installation
+## API endpoints
 
-If you prefer not to use GVM, you can install Go directly:
+| Method | Path | Description |
+|--------|------|-------------|
+| GET | `/health` | Legacy health check |
+| GET | `/live` | Liveness probe (always OK) |
+| GET | `/ready` | Readiness probe (checks Redis when configured) |
+| POST | `/api/v1/user` | Create user (stub) |
+| GET | `/api/v1/user/:id` | Fetch user by ID (stub) |
+| POST | `/api/v1/limit/check` | Check rate limit (stub) |
+| POST | `/api/v1/limit/reset` | Reset rate limit (stub) |
 
-1. Download Go from [https://golang.org/dl/](https://golang.org/dl/)
-2. Follow the installation instructions for your operating system
-3. Verify installation with `go version`
+Example:
 
-## 🛠️ Quick Start
-
-### Local Development
-
-1. **Clone the repository**
-   ```bash
-   git clone <repository-url>
-   cd go-service-template-clean-architecture
-   ```
-
-2. **Install dependencies**
-   ```bash
-   make deps
-   ```
-
-3. **Setup Env Variables**
-   ```
-   Copy .env.example -> .env 
-   Update .env variables to run service on local
-   ```
-
-4. **Run the application**
-   ```bash
-   make run
-   ```
-
-The service will be available at `http://localhost:8080`
-
-### Run With Docker 
-
-1. **Build and run with Docker Compose**
-   ```bash
-   make compose-up
-   ```
-
-2. **Stop services**
-   ```bash
-   make compose-down
-   ```
-
-## 📚 API Documentation
-
-### Health Check
 ```http
 GET /health
 ```
 
-Response:
 ```json
 {
   "status": "ok",
@@ -149,149 +104,83 @@ Response:
 }
 ```
 
-## 🔧 Configuration
-
-The application uses environment variables for configuration:
+## Configuration
 
 | Variable | Description | Default |
 |----------|-------------|---------|
 | `HOST` | Server host | `0.0.0.0` |
 | `PORT` | Server port | `8080` |
-| `REDIS_HOST` | Redis host | `localhost` |
-| `ENV` | Environment | `local` |
+| `REDIS_HOST` | Redis address | `localhost` |
+| `ENV` | Environment name | `local` |
 | `APP_NAME` | Application name | `go-service-template` |
 | `READ_TIMEOUT` | HTTP read timeout | `60s` |
 | `WRITE_TIMEOUT` | HTTP write timeout | `60s` |
+| `OTEL_ENABLED` | Enable OpenTelemetry tracing | `false` |
+| `OTLP_ENDPOINT` | OTLP gRPC endpoint | `localhost:4317` |
+| `LOG_LEVEL` | Log level | `debug` |
 
-## 🧪 Testing
+When adding a database, consider [golang-migrate](https://github.com/golang-migrate/migrate)—this scaffold does not ship migrations.
 
-### Run Tests
-```bash
-# Unit tests
-make test
-
-# Integration tests
-make integration-test
-
-# All tests with coverage
-make test && make integration-test
-```
-
-### Code Quality
-```bash
-# Lint code
-make lint
-
-# Format code
-make format
-
-# Run all pre-commit checks
-make pre-commit
-```
-
-### Mockery Integration
-
-This service includes Testify and Mockery for mocking interfaces.
-
-#### Installation and Configuration
+## Testing and quality
 
 ```bash
-  go install github.com/vektra/mockery/v3@v3.5.5
-  # check version
-  mockery version
-```
-or through homebrew
-```bash
-  brew install mockery
-```
-
-#### Usage
-
-To generate mocks for all the interfaces.
-
-```bash
-  mockery
+make test        # all tests with -race and coverage
+make lint        # golangci-lint
+make format      # gofumpt
+make vuln        # govulncheck
+make pre-commit  # format + lint + test
+make mock        # regenerate mocks (mockery)
 ```
 
-Note — please refer to the [Mockery Documentation](https://vektra.github.io/mockery/latest/installation/) for more information and specific configurations.
+## Mock generation
 
-## 📦 Development
-
-### Project Structure
-```
-├── cmd/                    # Application entry point
-├── internal/               # Private application code
-│   ├── api/               # HTTP handlers and DTOs
-│   ├── domain/            # Business entities
-│   ├── infrastructure/    # External dependencies
-│   └── usecase/           # Business logic
-├── server/                # Application setup
-└── docker-compose.yml     # Local development setup
-```
-
-### Adding New Features
-
-1. **Define domain entities** in `internal/domain/`
-2. **Implement use cases** in `internal/usecase/`
-3. **Create API handlers** in `internal/api/`
-4. **Add routes** in `server/router/`
-5. **Write tests** for all layers
-
-## 🚀 Deployment
-
-### Docker
-```bash
-# Build image
-docker build -t go-service-template .
-
-# Run container
-docker run -p 8080:8080 go-service-template
-```
-
-### Logging
-Structured logging with:
-- JSON format for production
-- Context propagation
-- Correlation IDs
-- Log levels (DEBUG, INFO, WARN, ERROR)
-
-## OpenTelemetry Integration
-
-This service includes OpenTelemetry for distributed tracing and observability.
-
-### Configuration
-
-Add to your `.env` file:
-
-### Local Development
-
-Run Jaeger for trace visualization:
+Mocks are generated with [Mockery](https://vektra.github.io/mockery/):
 
 ```bash
-docker run -d --name jaeger -p 16686:16686 -p 14250:14250 jaegertracing/all-in-one:latest
+make bin-deps   # install pinned tools from go.mod
+make mock
 ```
 
-Visit `http://localhost:16686` to view traces.
+## Project structure
 
-## 🤝 Contributing
+```
+├── cmd/                 # Application entry point
+├── internal/
+│   ├── api/             # HTTP handlers and DTOs
+│   ├── domain/          # Business entities
+│   ├── infrastructure/  # Config, logging, Redis, repos
+│   └── usecase/         # Application logic
+├── integrationtests/    # HTTP integration tests
+├── server/              # App, router, resolver, telemetry
+├── docs/                # Adopter and architecture docs
+└── docker-compose.yml
+```
 
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Run tests and linting
-5. Submit a pull request
+## OpenTelemetry
 
-## 📄 License
+Tracing is **disabled by default**. Enable when Jaeger or another OTLP collector is available:
 
-This project is licensed under the MIT License—see the LICENSE file for details.
+```bash
+OTEL_ENABLED=true
+OTLP_ENDPOINT=localhost:4317
+```
 
-## 🆘 Support
+Docker Compose sets `OTEL_ENABLED=true` and points to Jaeger. View traces at `http://localhost:16686`.
 
-For support and questions:
-- Create an issue in the repository
-- Check the documentation
-- Review the code examples
+## Extending the template
 
----
+- [docs/CUSTOMIZING.md](docs/CUSTOMIZING.md) — rename module, strip samples, first feature
+- [docs/EXTENDING.md](docs/EXTENDING.md) — optional additions (DB, metrics, OpenAPI)
+- [CONTRIBUTING.md](CONTRIBUTING.md) — contributor workflow
 
-**Built with ❤️ using Go and Clean Architecture principles**
+## Contributing
+
+See [CONTRIBUTING.md](CONTRIBUTING.md). Please read our [Code of Conduct](CODE_OF_CONDUCT.md).
+
+## Security
+
+Report vulnerabilities privately—see [SECURITY.md](SECURITY.md).
+
+## License
+
+This project is licensed under the Apache License 2.0—see [LICENSE](LICENSE) for details.

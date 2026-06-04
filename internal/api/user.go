@@ -3,6 +3,7 @@ package api
 import (
 	"context"
 	"net/http"
+	"strconv"
 
 	"go-service-template/internal/api/dto"
 	ginContext "go-service-template/internal/infrastructure/context"
@@ -45,16 +46,19 @@ func (api *userHandler) CreateUser(ctx *ginContext.GinContext) {
 	api.logAndSendSuccess(logCtx, ctx, "User created successfully", req.ID, http.StatusCreated, response)
 }
 
-// FetchUser fetches user from a database.
+// FetchUser fetches user by path parameter ID.
 func (api *userHandler) FetchUser(ctx *ginContext.GinContext) {
 	logCtx := logger.GetLogContext(ctx.Context)
 	logger.Info(logCtx, "Fetching user")
 
-	var req dto.FetchUserRequest
-	if !api.validateRequest(logCtx, ctx, &req) {
+	id, err := strconv.Atoi(ctx.Param("id"))
+	if err != nil {
+		logger.Error(logCtx, "Invalid user ID", logger.ErrorField(logger.FieldError, err))
+		api.sendErrorResponse(ctx, http.StatusBadRequest, "Invalid user ID: ", err)
 		return
 	}
 
+	req := dto.FetchUserRequest{ID: id}
 	user, err := api.user.FetchUser(&req)
 	if !api.handleUseCaseError(logCtx, ctx, err, "Failed to fetch user", req.ID) {
 		return

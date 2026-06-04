@@ -7,6 +7,7 @@ import (
 	"net/http/httptest"
 	"testing"
 
+	"go-service-template/internal/infrastructure/config"
 	ginContext "go-service-template/internal/infrastructure/context"
 
 	"github.com/gin-gonic/gin"
@@ -14,28 +15,50 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
+func newTestHealthHandler() *HealthHandler {
+	return NewHealthHandler(config.NewConfig(), nil)
+}
+
 func TestNewHealthHandler_ValidInput_ReturnsHealthHandler(t *testing.T) {
-	handler := NewHealthHandler()
+	handler := newTestHealthHandler()
 
 	assert.NotNil(t, handler)
 	assert.IsType(t, &HealthHandler{}, handler)
 }
 
 func TestHealthHandler_Check_ValidContext_ReturnsOKStatus(t *testing.T) {
-	handler := NewHealthHandler()
+	handler := newTestHealthHandler()
 	w, ginCtx := setupHealthTestContext(t)
-	
+
 	handler.Check(ginCtx)
+
+	assert.Equal(t, http.StatusOK, w.Code)
+}
+
+func TestHealthHandler_Live_ValidContext_ReturnsOKStatus(t *testing.T) {
+	handler := newTestHealthHandler()
+	w, ginCtx := setupHealthTestContext(t)
+
+	handler.Live(ginCtx)
+
+	assert.Equal(t, http.StatusOK, w.Code)
+}
+
+func TestHealthHandler_Ready_WithoutRedis_ReturnsOKStatus(t *testing.T) {
+	handler := newTestHealthHandler()
+	w, ginCtx := setupHealthTestContext(t)
+
+	handler.Ready(ginCtx)
 
 	assert.Equal(t, http.StatusOK, w.Code)
 }
 
 func TestHealthHandler_Check_ResponseFields_ReturnsCorrectValues(t *testing.T) {
 	tests := []struct {
-		name           string
-		field          string
-		expectedValue  string
-		setupContext   func(t *testing.T) (*httptest.ResponseRecorder, *ginContext.GinContext)
+		name          string
+		field         string
+		expectedValue string
+		setupContext  func(t *testing.T) (*httptest.ResponseRecorder, *ginContext.GinContext)
 	}{
 		{
 			name:          "StatusField",
@@ -65,15 +88,15 @@ func TestHealthHandler_Check_ResponseFields_ReturnsCorrectValues(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			handler := NewHealthHandler()
+			handler := newTestHealthHandler()
 			w, ginCtx := tt.setupContext(t)
-			
+
 			handler.Check(ginCtx)
 
 			var response map[string]interface{}
 			err := json.Unmarshal(w.Body.Bytes(), &response)
 			require.NoError(t, err)
-			
+
 			assert.Equal(t, tt.expectedValue, response[tt.field])
 		})
 	}
@@ -96,9 +119,9 @@ func TestHealthHandler_Check_ResponseHeaders_ReturnsCorrectContentType(t *testin
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			handler := NewHealthHandler()
+			handler := newTestHealthHandler()
 			w, ginCtx := tt.setupContext(t)
-			
+
 			handler.Check(ginCtx)
 
 			assert.Equal(t, "application/json; charset=utf-8", w.Header().Get("Content-Type"))
@@ -123,61 +146,61 @@ func TestHealthHandler_Check_ResponseFormat_ReturnsValidJSON(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			handler := NewHealthHandler()
+			handler := newTestHealthHandler()
 			w, ginCtx := tt.setupContext(t)
-			
+
 			handler.Check(ginCtx)
 
 			var response map[string]interface{}
 			err := json.Unmarshal(w.Body.Bytes(), &response)
 			require.NoError(t, err)
-			
+
 			assert.NotNil(t, response)
 		})
 	}
 }
 
 func TestHealthHandler_Check_CompleteResponse_ReturnsExpectedStructure(t *testing.T) {
-	handler := NewHealthHandler()
+	handler := newTestHealthHandler()
 	w, ginCtx := setupHealthTestContext(t)
-	
+
 	handler.Check(ginCtx)
 
 	expectedResponse := map[string]interface{}{
 		"status":  "ok",
 		"service": "go-service-template",
 	}
-	
+
 	var actualResponse map[string]interface{}
 	err := json.Unmarshal(w.Body.Bytes(), &actualResponse)
 	require.NoError(t, err)
-	
+
 	assert.Equal(t, expectedResponse, actualResponse)
 }
 
 func setupHealthTestContext(t *testing.T) (*httptest.ResponseRecorder, *ginContext.GinContext) {
 	gin.SetMode(gin.TestMode)
-	
+
 	w := httptest.NewRecorder()
 	c, _ := gin.CreateTestContext(w)
 	ginCtx, err := ginContext.NewGinContext(c)
 	require.NoError(t, err)
-	
+
 	return w, ginCtx
 }
 
 func setupHealthTestContextWithRequest(t *testing.T) (*httptest.ResponseRecorder, *ginContext.GinContext) {
 	gin.SetMode(gin.TestMode)
-	
+
 	w := httptest.NewRecorder()
 	c, _ := gin.CreateTestContext(w)
-	
+
 	req, err := http.NewRequestWithContext(context.Background(), http.MethodGet, "/health", nil)
 	require.NoError(t, err)
 	c.Request = req
-	
+
 	ginCtx, err := ginContext.NewGinContext(c)
 	require.NoError(t, err)
-	
+
 	return w, ginCtx
 }

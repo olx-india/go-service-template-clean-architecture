@@ -21,6 +21,7 @@ type Resolver interface {
 type ServerContext struct {
 	UserHandler    api.IUserHandler
 	LimiterHandler api.ILimiterHandler
+	RedisProvider  *redis.Provider
 }
 
 type Provider struct {
@@ -60,8 +61,10 @@ func (r *resolver) ResolveServerContext() *ServerContext {
 }
 
 func (r *resolver) createServerContext() *resolver {
+	// Adopter: wire your handlers and use cases here.
 	r.UserHandler = api.NewUserHandler(user.NewUserUseCase(r.redisProvider, r.userRepo, r.userWebAPIProvider))
 	r.LimiterHandler = api.NewLimiterHandler(limit.NewLimitUseCase(r.redisProvider))
+	r.RedisProvider = r.redisProvider
 	return r
 }
 
@@ -82,7 +85,7 @@ func (r *resolver) resolveProviders() *resolver {
 }
 
 func (r *resolver) repositories() *resolver {
-	r.userRepo = persistent.NewUserRepo(nil)
+	r.userRepo = persistent.NewUserRepo()
 	return r
 }
 

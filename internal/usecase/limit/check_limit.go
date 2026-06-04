@@ -3,6 +3,7 @@ package limit
 import "go-service-template/internal/api/dto"
 
 func (s *UseCase) CheckLimit(req *dto.CheckLimitRequest) (dto.CheckLimitResponse, error) {
+	// Adopter: implement rate limiting with Redis.
 	if req == nil {
 		return dto.CheckLimitResponse{}, nil
 	}
@@ -10,6 +11,7 @@ func (s *UseCase) CheckLimit(req *dto.CheckLimitRequest) (dto.CheckLimitResponse
 }
 
 func (s *UseCase) ResetLimit(req *dto.CheckLimitRequest) (dto.CheckLimitResponse, error) {
+	// Adopter: implement rate limit reset with Redis.
 	if req == nil {
 		return dto.CheckLimitResponse{}, nil
 	}
