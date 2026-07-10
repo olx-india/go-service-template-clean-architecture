@@ -29,6 +29,16 @@ func NewUserHandler(userUseCase userPkg.IUserUseCase) IUserHandler {
 }
 
 // CreateUser create user from the user request.
+// @Title Create user
+// @Description Create a new user from the request body.
+// @Accept json
+// @Produce json
+// @Param request body dto.CreateUserRequest true "Create user payload"
+// @Success 201 {object} dto.UserResponse "User created"
+// @Failure 400 {object} dto.ErrorResponse "Invalid request"
+// @Failure 500 {object} dto.ErrorResponse "Internal error"
+// @Resource users
+// @Router /api/v1/user [post]
 func (api *userHandler) CreateUser(ctx *ginContext.GinContext) {
 	logCtx := logger.GetLogContext(ctx.Context)
 	logger.Info(logCtx, "Creating user")
@@ -47,6 +57,15 @@ func (api *userHandler) CreateUser(ctx *ginContext.GinContext) {
 }
 
 // FetchUser fetches user by path parameter ID.
+// @Title Fetch user
+// @Description Fetch a user by path parameter ID.
+// @Produce json
+// @Param id path int true "User identity" "1"
+// @Success 200 {object} dto.UserResponse "User found"
+// @Failure 400 {object} dto.ErrorResponse "Invalid user ID"
+// @Failure 500 {object} dto.ErrorResponse "Internal error"
+// @Resource users
+// @Router /api/v1/user/{id} [get]
 func (api *userHandler) FetchUser(ctx *ginContext.GinContext) {
 	logCtx := logger.GetLogContext(ctx.Context)
 	logger.Info(logCtx, "Fetching user")

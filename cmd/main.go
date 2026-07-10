@@ -8,6 +8,13 @@ import (
 	appPkg "go-service-template/server/app"
 )
 
+// @Title Go Service Template API
+// @Version 1.0.0
+// @Description Clean Architecture Go service scaffold with sample user and limit endpoints.
+// @ContactName API Support
+// @LicenseName Apache 2.0
+// @LicenseURL https://www.apache.org/licenses/LICENSE-2.0
+// @Server http://localhost:8080 Local
 func main() {
 	cfg := config.NewConfig()
 

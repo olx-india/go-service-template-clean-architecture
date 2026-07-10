@@ -54,7 +54,8 @@ Follow the existing pattern:
 4. **DTO + handler** — add request/response types in `internal/api/dto/` and handler in `internal/api/`
 5. **Wire** — register in `server/resolver/resolver.go`
 6. **Route** — add in `server/router/router.go`
-7. **Test** — unit tests per layer; integration test in `integrationtests/`
+7. **OpenAPI** — annotate the handler, run `make swagger`, commit `docs/openapi/oas.json`
+8. **Test** — unit tests per layer; integration test in `integrationtests/`
 
 Look for `Adopter:` comments in the resolver and use cases for extension points.
 

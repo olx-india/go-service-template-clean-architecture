@@ -29,12 +29,13 @@ Dependency flow points inward: outer layers depend on inner abstractions, not th
 | Redis client | Common cache/session/rate-limit backend; optional at runtime |
 | OpenTelemetry | Optional tracing via OTLP; disabled by default for simple local runs |
 | Mockery | Interface mocks for unit testing across layers |
+| go-swagger3 | OpenAPI 3 generation from handler godoc; Swagger UI at `/swagger` |
 
 ## Intentionally omitted
 
 - Database drivers and migrations
 - Authentication / authorization
-- Prometheus metrics and OpenAPI generation
+- Prometheus metrics
 - Kubernetes / Helm / Terraform
 
 These are documented in [EXTENDING.md](../EXTENDING.md).
@@ -47,7 +48,8 @@ These are documented in [EXTENDING.md](../EXTENDING.md).
 4. Add DTOs and handler in `internal/api/`
 5. Wire dependencies in `server/resolver/resolver.go`
 6. Register route in `server/router/router.go`
-7. Add unit and integration tests
+7. Annotate the handler and run `make swagger`
+8. Add unit and integration tests
 
 ## Consequences
 

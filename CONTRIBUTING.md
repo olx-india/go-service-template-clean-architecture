@@ -48,7 +48,7 @@ Use clear, imperative commit messages:
 **Out of scope (add in your fork after using the template):**
 
 - Full database implementations
-- Auth, metrics, OpenAPI, deployment manifests
+- Auth, metrics, deployment manifests
 
 See [docs/CUSTOMIZING.md](docs/CUSTOMIZING.md) for how adopters extend the template.
 

@@ -12,10 +12,11 @@ An opinionated Go service **scaffold** following Clean Architecture. It provides
 |------------------|----------------------|
 | Clean Architecture layers + DI resolver | Business logic in use cases |
 | Gin HTTP server with graceful shutdown | Database / migrations |
-| Structured logging (Zap) + request IDs | Auth, metrics, OpenAPI |
+| Structured logging (Zap) + request IDs | Auth, metrics |
 | Optional OTLP tracing (`OTEL_ENABLED`) | Deployment manifests |
 | Redis client + readiness probe | Rate limiting logic |
 | Sample user + limit endpoints (stubs) | Your domain features |
+| OpenAPI 3 via [go-swagger3](https://github.com/parvez3019/go-swagger3) + Swagger UI | |
 | Unit + integration tests, linting, CI | |
 
 Sample endpoints demonstrate **handler → use case → repository** wiring. Business logic is intentionally minimal—implement your domain in the use case layer.
@@ -86,6 +87,7 @@ make compose-down  # stop stack
 | GET | `/health` | Legacy health check |
 | GET | `/live` | Liveness probe (always OK) |
 | GET | `/ready` | Readiness probe (checks Redis when configured) |
+| GET | `/swagger/index.html` | Interactive OpenAPI (Swagger UI) |
 | POST | `/api/v1/user` | Create user (stub) |
 | GET | `/api/v1/user/:id` | Fetch user by ID (stub) |
 | POST | `/api/v1/limit/check` | Check rate limit (stub) |
@@ -128,9 +130,22 @@ make test        # all tests with -race and coverage
 make lint        # golangci-lint
 make format      # gofumpt
 make vuln        # govulncheck
+make swagger     # regenerate OpenAPI 3 spec (go-swagger3)
 make pre-commit  # format + lint + test
 make mock        # regenerate mocks (mockery)
 ```
+
+## OpenAPI / Swagger
+
+Handler godoc annotations are turned into an OpenAPI 3 document with [go-swagger3](https://github.com/parvez3019/go-swagger3). The generated file is embedded and served at `/swagger/index.html`.
+
+```bash
+make bin-deps    # install pinned tools (includes go-swagger3)
+make swagger     # write docs/openapi/oas.json
+make run         # UI at http://localhost:8080/swagger/index.html
+```
+
+After changing handler annotations or DTO tags, re-run `make swagger` and commit the updated `docs/openapi/oas.json`.
 
 ## Mock generation
 
@@ -152,7 +167,7 @@ make mock
 │   └── usecase/         # Application logic
 ├── integrationtests/    # HTTP integration tests
 ├── server/              # App, router, resolver, telemetry
-├── docs/                # Adopter and architecture docs
+├── docs/                # Adopter docs + embedded OpenAPI spec
 └── docker-compose.yml
 ```
 
@@ -170,7 +185,7 @@ Docker Compose sets `OTEL_ENABLED=true` and points to Jaeger. View traces at `ht
 ## Extending the template
 
 - [docs/CUSTOMIZING.md](docs/CUSTOMIZING.md) — rename module, strip samples, first feature
-- [docs/EXTENDING.md](docs/EXTENDING.md) — optional additions (DB, metrics, OpenAPI)
+- [docs/EXTENDING.md](docs/EXTENDING.md) — optional additions (DB, metrics, auth)
 - [CONTRIBUTING.md](CONTRIBUTING.md) — contributor workflow
 
 ## Contributing

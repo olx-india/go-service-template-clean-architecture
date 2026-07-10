@@ -2,12 +2,14 @@ package router
 
 import (
 	"context"
+	"net/http"
+
+	"go-service-template/docs/openapi"
 	"go-service-template/internal/api"
 	"go-service-template/internal/infrastructure/config"
 	gincontext "go-service-template/internal/infrastructure/context"
 	"go-service-template/internal/infrastructure/logger"
 	"go-service-template/server/resolver"
-	"net/http"
 
 	"github.com/gin-gonic/gin"
 	"go.opentelemetry.io/contrib/instrumentation/github.com/gin-gonic/gin/otelgin"
@@ -48,6 +50,7 @@ func (r *Router) RegisterRoutes(serverContext *resolver.ServerContext) *Router {
 	r.POST("/api/v1/limit/reset", WrapContext(serverContext.LimiterHandler.ResetLimit))
 	r.POST("/api/v1/user", WrapContext(serverContext.UserHandler.CreateUser))
 	r.GET("/api/v1/user/:id", WrapContext(serverContext.UserHandler.FetchUser))
+	r.Any("/swagger/*any", gin.WrapH(openapi.Handler()))
 	return r
 }
 

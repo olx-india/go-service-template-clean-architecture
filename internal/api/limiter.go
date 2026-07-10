@@ -26,12 +26,34 @@ func NewLimiterHandler(limiter limitPkg.ILimitUseCase) ILimiterHandler {
 	}
 }
 
+// CheckLimit checks the remaining rate limit for a user.
+// @Title Check limit
+// @Description Check the remaining rate limit for a user.
+// @Accept json
+// @Produce json
+// @Param request body dto.CheckLimitRequest true "Limit check payload"
+// @Success 200 {object} dto.CheckLimitResponse "Limit status"
+// @Failure 400 {object} dto.ErrorResponse "Invalid request"
+// @Failure 500 {object} dto.ErrorResponse "Internal error"
+// @Resource limits
+// @Router /api/v1/limit/check [post]
 func (api *limiterHandler) CheckLimit(ctx *context.GinContext) {
 	api.handleLimit(ctx, "Checking limit", func(req *dto.CheckLimitRequest) (dto.CheckLimitResponse, error) {
 		return api.limit.CheckLimit(req)
 	}, "Limit checked successfully", "Failed to fetch limit")
 }
 
+// ResetLimit resets the rate limit for a user.
+// @Title Reset limit
+// @Description Reset the rate limit for a user.
+// @Accept json
+// @Produce json
+// @Param request body dto.CheckLimitRequest true "Limit reset payload"
+// @Success 200 {object} dto.CheckLimitResponse "Limit status after reset"
+// @Failure 400 {object} dto.ErrorResponse "Invalid request"
+// @Failure 500 {object} dto.ErrorResponse "Internal error"
+// @Resource limits
+// @Router /api/v1/limit/reset [post]
 func (api *limiterHandler) ResetLimit(ctx *context.GinContext) {
 	api.handleLimit(ctx, "Resetting limit", func(req *dto.CheckLimitRequest) (dto.CheckLimitResponse, error) {
 		return api.limit.ResetLimit(req)

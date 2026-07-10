@@ -1,0 +1,504 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Go Service Template API",
+    "description": "Clean Architecture Go service scaffold with sample user and limit endpoints.",
+    "contact": {
+      "name": "API Support"
+    },
+    "license": {
+      "name": "Apache 2.0",
+      "url": "https://www.apache.org/licenses/LICENSE-2.0"
+    },
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:8080",
+      "description": " Local"
+    }
+  ],
+  "paths": {
+    "/api/v1/limit/check": {
+      "post": {
+        "responses": {
+          "200": {
+            "description": "Limit status",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CheckLimitResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "limits"
+        ],
+        "summary": "Check limit",
+        "description": " Check the remaining rate limit for a user.",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CheckLimitRequest"
+              }
+            }
+          },
+          "required": true
+        }
+      }
+    },
+    "/api/v1/limit/reset": {
+      "post": {
+        "responses": {
+          "200": {
+            "description": "Limit status after reset",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CheckLimitResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "limits"
+        ],
+        "summary": "Reset limit",
+        "description": " Reset the rate limit for a user.",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CheckLimitRequest"
+              }
+            }
+          },
+          "required": true
+        }
+      }
+    },
+    "/api/v1/user": {
+      "post": {
+        "responses": {
+          "201": {
+            "description": "User created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "users"
+        ],
+        "summary": "Create user",
+        "description": " Create a new user from the request body.",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateUserRequest"
+              }
+            }
+          },
+          "required": true
+        }
+      }
+    },
+    "/api/v1/user/{id}": {
+      "get": {
+        "responses": {
+          "200": {
+            "description": "User found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid user ID",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "users"
+        ],
+        "summary": "Fetch user",
+        "description": " Fetch a user by path parameter ID.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "User identity",
+            "required": true,
+            "example": "1",
+            "schema": {
+              "type": "integer",
+              "format": "int64",
+              "description": "User identity"
+            }
+          }
+        ]
+      }
+    },
+    "/health": {
+      "get": {
+        "responses": {
+          "200": {
+            "description": "Service is healthy",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HealthResponse"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "health"
+        ],
+        "summary": "Health check",
+        "description": " Legacy health check endpoint."
+      }
+    },
+    "/live": {
+      "get": {
+        "responses": {
+          "200": {
+            "description": "Process is alive",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HealthResponse"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "health"
+        ],
+        "summary": "Liveness probe",
+        "description": " Always returns OK when the process is running."
+      }
+    },
+    "/ready": {
+      "get": {
+        "responses": {
+          "200": {
+            "description": "Service is ready",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HealthResponse"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Dependency unavailable",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NotReadyResponse"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "health"
+        ],
+        "summary": "Readiness probe",
+        "description": " Returns OK when dependencies are available; 503 when Redis is down."
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "CheckLimitRequest": {
+        "type": "object",
+        "properties": {
+          "userID": {
+            "type": "integer",
+            "description": "User identity",
+            "example": 1
+          }
+        }
+      },
+      "CheckLimitResponse": {
+        "type": "object",
+        "properties": {
+          "userID": {
+            "type": "integer",
+            "description": "User identity",
+            "example": 1
+          },
+          "limitAvailable": {
+            "type": "integer",
+            "description": "Remaining limit units",
+            "example": 10
+          }
+        }
+      },
+      "CreateUserRequest": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "User identity",
+            "example": 1
+          },
+          "name": {
+            "type": "string",
+            "description": "Display name",
+            "example": "Ada Lovelace"
+          },
+          "email": {
+            "type": "string",
+            "description": "Email address",
+            "example": "ada@example.com"
+          },
+          "age": {
+            "type": "integer",
+            "description": "Age in years",
+            "example": 36,
+            "maximum": 130
+          }
+        }
+      },
+      "ErrorResponse": {
+        "type": "object",
+        "properties": {
+          "error": {
+            "type": "string",
+            "description": "Human-readable error message",
+            "example": "Invalid request body: key is missing"
+          }
+        }
+      },
+      "HealthResponse": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "description": "Probe status",
+            "example": "ok"
+          },
+          "service": {
+            "type": "string",
+            "description": "Application name",
+            "example": "go-service-template"
+          }
+        }
+      },
+      "NotReadyResponse": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "description": "Probe status",
+            "example": "not_ready"
+          },
+          "service": {
+            "type": "string",
+            "description": "Application name",
+            "example": "go-service-template"
+          },
+          "error": {
+            "type": "string",
+            "description": "Dependency failure detail",
+            "example": "redis unavailable"
+          }
+        }
+      },
+      "UserResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "User identity",
+            "example": 1
+          },
+          "name": {
+            "type": "string",
+            "description": "Display name",
+            "example": "Ada Lovelace"
+          },
+          "email": {
+            "type": "string",
+            "description": "Email address",
+            "example": "ada@example.com"
+          },
+          "age": {
+            "type": "integer",
+            "description": "Age in years",
+            "example": 36
+          }
+        }
+      },
+      "dto.CheckLimitRequest": {
+        "type": "object",
+        "properties": {
+          "userID": {
+            "type": "integer",
+            "description": "User identity",
+            "example": 1
+          }
+        }
+      },
+      "dto.CheckLimitResponse": {
+        "type": "object",
+        "properties": {
+          "userID": {
+            "type": "integer",
+            "description": "User identity",
+            "example": 1
+          },
+          "limitAvailable": {
+            "type": "integer",
+            "description": "Remaining limit units",
+            "example": 10
+          }
+        }
+      },
+      "dto.ErrorResponse": {
+        "type": "object",
+        "properties": {
+          "error": {
+            "type": "string",
+            "description": "Human-readable error message",
+            "example": "Invalid request body: key is missing"
+          }
+        }
+      },
+      "dto.HealthResponse": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "description": "Probe status",
+            "example": "ok"
+          },
+          "service": {
+            "type": "string",
+            "description": "Application name",
+            "example": "go-service-template"
+          }
+        }
+      },
+      "dto.UserResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "User identity",
+            "example": 1
+          },
+          "name": {
+            "type": "string",
+            "description": "Display name",
+            "example": "Ada Lovelace"
+          },
+          "email": {
+            "type": "string",
+            "description": "Email address",
+            "example": "ada@example.com"
+          },
+          "age": {
+            "type": "integer",
+            "description": "Age in years",
+            "example": 36
+          }
+        }
+      }
+    }
+  }
+}

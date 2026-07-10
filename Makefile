@@ -41,6 +41,17 @@ mock: ## generate mocks with mockery
 	mockery
 .PHONY: mock
 
+swagger: ## generate OpenAPI 3 spec with go-swagger3
+	@test -x $(LOCAL_BIN)/go-swagger3 || GOBIN=$(LOCAL_BIN) go install tool
+	$(LOCAL_BIN)/go-swagger3 \
+		--module-path . \
+		--main-file-path ./cmd/main.go \
+		--handler-path ./internal/api \
+		--output ./docs/openapi/oas.json \
+		--schema-without-pkg \
+		--quiet
+.PHONY: swagger
+
 vuln: ## run govulncheck
 	govulncheck ./...
 .PHONY: vuln

@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- OpenAPI 3 generation with [go-swagger3](https://github.com/parvez3019/go-swagger3) and Swagger UI at `/swagger`
 - CONTRIBUTING.md, GitHub issue/PR templates, and CODEOWNERS
 - docs/CUSTOMIZING.md, docs/EXTENDING.md, and ADR for clean architecture layers
 - `/live` and `/ready` probe endpoints
@@ -16,7 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Optional OpenTelemetry via `OTEL_ENABLED` (disabled by default)
 - CI jobs for govulncheck, Docker build, and CodeQL
 - `.editorconfig` and `.pre-commit-config.yaml`
-- Makefile targets: `format`, `vuln`, fixed `pre-commit` and `mock`
+- Makefile targets: `format`, `vuln`, `swagger`, fixed `pre-commit` and `mock`
 
 ### Changed
 

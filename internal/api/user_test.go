@@ -311,8 +311,8 @@ func TestUserHandler_FetchUser_ValidRequest_ReturnsOKResponse(t *testing.T) {
 
 func TestUserHandler_FetchUser_InvalidID_ReturnsBadRequest(t *testing.T) {
 	tests := []struct {
-		name    string
-		userID  string
+		name     string
+		userID   string
 		errorMsg string
 	}{
 		{

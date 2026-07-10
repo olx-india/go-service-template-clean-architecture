@@ -78,6 +78,10 @@ linters:
         - style
     gocyclo:
       min-complexity: 10
+    godot:
+      # go-swagger3 OpenAPI annotations are not prose sentences
+      exclude:
+        - '^\s*@'
     misspell:
       locale: US
     nestif:
@@ -97,9 +101,6 @@ linters:
           - godot
           - paralleltest
         path: integrationtests
-      - linters:
-          - godot
-        path: internal/controller/http
     paths:
       - bin/
       - third_party$

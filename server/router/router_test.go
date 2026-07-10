@@ -47,3 +47,23 @@ func TestRegisterRoutes_Health_OK(t *testing.T) {
 	engine.ServeHTTP(rr, req)
 	assert.Equal(t, http.StatusOK, rr.Code)
 }
+
+func TestRegisterRoutes_SwaggerUI_OK(t *testing.T) {
+	cfg := config.NewConfig()
+	r := NewRouter(cfg)
+	srvCtx := resolver.NewResolver(cfg).ResolveServerContext()
+	r.RegisterRoutes(srvCtx)
+	engine := r.Get()
+
+	rr := httptest.NewRecorder()
+	req := httptest.NewRequest(http.MethodGet, "/swagger/index.html", nil)
+	engine.ServeHTTP(rr, req)
+	assert.Equal(t, http.StatusOK, rr.Code)
+	assert.Contains(t, rr.Body.String(), "SwaggerUIBundle")
+
+	rr = httptest.NewRecorder()
+	req = httptest.NewRequest(http.MethodGet, "/swagger/doc.json", nil)
+	engine.ServeHTTP(rr, req)
+	assert.Equal(t, http.StatusOK, rr.Code)
+	assert.Contains(t, rr.Body.String(), `"openapi": "3.0.0"`)
+}

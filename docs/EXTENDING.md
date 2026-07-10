@@ -13,7 +13,7 @@ This scaffold intentionally omits several production concerns. Add them in your 
 
 - Add middleware in `server/router/router.go`
 - Keep auth logic out of handlers—validate in use cases or a dedicated auth package
-- Document required headers/tokens in your API docs
+- Document required headers/tokens with go-swagger3 `@SecurityScheme` / `@Security` on `cmd/main.go` and regenerate with `make swagger`
 
 ## Metrics (Prometheus)
 
@@ -23,9 +23,14 @@ This scaffold intentionally omits several production concerns. Add them in your 
 
 ## OpenAPI / Swagger
 
-- Add `swaggo/swag` or `oapi-codegen` annotations on handlers
-- Serve generated spec at `/swagger` or publish as a static file
-- Generate clients only if your team needs them
+OpenAPI 3 is already wired via [go-swagger3](https://github.com/parvez3019/go-swagger3):
+
+1. Annotate handlers under `internal/api/` (`@Title`, `@Router`, `@Param`, `@Success`, …)
+2. Add `json` / OAS tags on DTOs in `internal/api/dto/`
+3. Run `make swagger` to refresh `docs/openapi/oas.json`
+4. Browse the UI at `http://localhost:8080/swagger/index.html`
+
+Service-level metadata lives on `cmd/main.go`. Commit the regenerated `oas.json` so Docker/CI builds embed the latest spec without running the CLI.
 
 ## Configuration validation
 
