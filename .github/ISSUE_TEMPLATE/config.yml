@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Questions and ideas
+    url: https://github.com/olx-india/go-service-template-clean-architecture/discussions
+    about: Ask how to use or extend the template, or share what you built.
+  - name: Security vulnerabilities
+    url: https://github.com/olx-india/go-service-template-clean-architecture/blob/main/SECURITY.md
+    about: Please report security issues privately, not as public issues.

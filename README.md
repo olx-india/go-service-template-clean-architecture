@@ -3,8 +3,19 @@
 [![CI](https://github.com/olx-india/go-service-template-clean-architecture/actions/workflows/ci.yml/badge.svg)](https://github.com/olx-india/go-service-template-clean-architecture/actions/workflows/ci.yml)
 [![Go Version](https://img.shields.io/badge/go-1.26.11-blue.svg)](https://golang.org/dl/)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE)
+[![Go Reference](https://pkg.go.dev/badge/github.com/olx-india/go-service-template-clean-architecture.svg)](https://pkg.go.dev/github.com/olx-india/go-service-template-clean-architecture)
+[![Go Report Card](https://goreportcard.com/badge/github.com/olx-india/go-service-template-clean-architecture)](https://goreportcard.com/report/github.com/olx-india/go-service-template-clean-architecture)
+[![codecov](https://codecov.io/gh/olx-india/go-service-template-clean-architecture/graph/badge.svg)](https://codecov.io/gh/olx-india/go-service-template-clean-architecture)
+[![Release](https://img.shields.io/github/v/release/olx-india/go-service-template-clean-architecture)](https://github.com/olx-india/go-service-template-clean-architecture/releases)
+[![Stars](https://img.shields.io/github/stars/olx-india/go-service-template-clean-architecture?style=social)](https://github.com/olx-india/go-service-template-clean-architecture/stargazers)
 
-An opinionated Go service **scaffold** following Clean Architecture. It provides layered structure, dependency injection, logging, optional OpenTelemetry, and sample HTTP endpoints with clear extension points—not a full production product.
+A small **Go microservice template** built on Clean Architecture: Gin HTTP server, dependency injection, Zap logging, OpenTelemetry tracing, Redis, and OpenAPI 3 with Swagger UI, ready to run with Docker Compose.
+
+**[Create a repository from this template →](https://github.com/olx-india/go-service-template-clean-architecture/generate)**
+
+<!-- TODO: add docs/assets/demo.gif — make compose-up → Swagger UI → Jaeger trace -->
+
+It's an opinionated **scaffold**, not a full production product: layered structure, dependency injection, logging, optional OpenTelemetry, and sample HTTP endpoints with clear extension points.
 
 ## What is included vs what you add
 
@@ -20,6 +31,18 @@ An opinionated Go service **scaffold** following Clean Architecture. It provides
 | Unit + integration tests, linting, CI | |
 
 Sample endpoints demonstrate **handler → use case → repository** wiring. Business logic is intentionally minimal—implement your domain in the use case layer.
+
+## How it compares
+
+| | This template | [evrone/go-clean-template](https://github.com/evrone/go-clean-template) | [golang-standards/project-layout](https://github.com/golang-standards/project-layout) |
+|---|---|---|---|
+| What it is | Minimal runnable HTTP service | Full example app with several transports | Directory layout convention, no runnable service |
+| HTTP framework | Gin | Fiber | — |
+| Transports | REST | REST, gRPC, RabbitMQ, NATS | — |
+| Storage | Redis client (database left to you) | Postgres + migrations | — |
+| API docs | OpenAPI 3 (go-swagger3) + Swagger UI | Swagger ([swag](https://github.com/swaggo/swag)) | — |
+| Kubernetes probes | `/live` and `/ready` | `/healthz` | — |
+| Pick it when | You want a small, readable starting point and add only what you need | You want many integrations wired from day one | You only need folder conventions |
 
 ## Architecture
 
@@ -199,3 +222,7 @@ Report vulnerabilities privately—see [SECURITY.md](SECURITY.md).
 ## License
 
 This project is licensed under the Apache License 2.0—see [LICENSE](LICENSE) for details.
+
+---
+
+If this template saved you time, please ⭐ the repo or share what you built in [Show and tell](https://github.com/olx-india/go-service-template-clean-architecture/discussions/categories/show-and-tell).
