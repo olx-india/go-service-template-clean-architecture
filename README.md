@@ -1,7 +1,7 @@
 # Go Service Template — Clean Architecture
 
 [![CI](https://github.com/olx-india/go-service-template-clean-architecture/actions/workflows/ci.yml/badge.svg)](https://github.com/olx-india/go-service-template-clean-architecture/actions/workflows/ci.yml)
-[![Go Version](https://img.shields.io/badge/go-1.24.6-blue.svg)](https://golang.org/dl/)
+[![Go Version](https://img.shields.io/badge/go-1.26.11-blue.svg)](https://golang.org/dl/)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE)
 
 An opinionated Go service **scaffold** following Clean Architecture. It provides layered structure, dependency injection, logging, optional OpenTelemetry, and sample HTTP endpoints with clear extension points—not a full production product.
@@ -49,7 +49,7 @@ See [docs/adr/001-clean-architecture-layers.md](docs/adr/001-clean-architecture-
 
 ## Prerequisites
 
-- Go 1.24.6+
+- Go 1.26.11+
 - Docker and Docker Compose (for local stack)
 - Make
 

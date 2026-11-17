@@ -27,7 +27,7 @@ body:
     id: version
     attributes:
       label: Go version
-      placeholder: go1.24.6
+      placeholder: go1.26.11
   - type: textarea
     id: logs
     attributes:
