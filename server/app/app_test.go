@@ -6,7 +6,7 @@ import (
     "time"
 
     "github.com/stretchr/testify/assert"
-    "go-service-template/internal/infrastructure/config"
+    "github.com/olx-india/go-service-template-clean-architecture/internal/infrastructure/config"
 )
 
 func TestApp_Start_ServesHealth(t *testing.T) {

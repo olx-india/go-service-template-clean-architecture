@@ -11,8 +11,8 @@ go mod edit -module github.com/your-org/your-service
 Find and replace the old module path across the codebase:
 
 ```bash
-# Example: replace go-service-template with your module path in imports
-grep -r "go-service-template" --include="*.go" .
+# Example: replace the template module path with yours in imports
+grep -r "github.com/olx-india/go-service-template-clean-architecture" --include="*.go" .
 ```
 
 Update these non-Go references:

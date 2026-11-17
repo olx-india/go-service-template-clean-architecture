@@ -5,7 +5,7 @@
 package mocks
 
 import (
-	"go-service-template/internal/api/dto"
+	"github.com/olx-india/go-service-template-clean-architecture/internal/api/dto"
 
 	mock "github.com/stretchr/testify/mock"
 )

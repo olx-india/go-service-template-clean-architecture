@@ -4,12 +4,12 @@ import (
 	"context"
 	"net/http"
 
-	"go-service-template/docs/openapi"
-	"go-service-template/internal/api"
-	"go-service-template/internal/infrastructure/config"
-	gincontext "go-service-template/internal/infrastructure/context"
-	"go-service-template/internal/infrastructure/logger"
-	"go-service-template/server/resolver"
+	"github.com/olx-india/go-service-template-clean-architecture/docs/openapi"
+	"github.com/olx-india/go-service-template-clean-architecture/internal/api"
+	"github.com/olx-india/go-service-template-clean-architecture/internal/infrastructure/config"
+	gincontext "github.com/olx-india/go-service-template-clean-architecture/internal/infrastructure/context"
+	"github.com/olx-india/go-service-template-clean-architecture/internal/infrastructure/logger"
+	"github.com/olx-india/go-service-template-clean-architecture/server/resolver"
 
 	"github.com/gin-gonic/gin"
 	"go.opentelemetry.io/contrib/instrumentation/github.com/gin-gonic/gin/otelgin"

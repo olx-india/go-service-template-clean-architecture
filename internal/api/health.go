@@ -5,10 +5,10 @@ import (
 	"net/http"
 	"time"
 
-	"go-service-template/internal/infrastructure/config"
-	gincontext "go-service-template/internal/infrastructure/context"
-	"go-service-template/internal/infrastructure/logger"
-	"go-service-template/internal/infrastructure/provider/redis"
+	"github.com/olx-india/go-service-template-clean-architecture/internal/infrastructure/config"
+	gincontext "github.com/olx-india/go-service-template-clean-architecture/internal/infrastructure/context"
+	"github.com/olx-india/go-service-template-clean-architecture/internal/infrastructure/logger"
+	"github.com/olx-india/go-service-template-clean-architecture/internal/infrastructure/provider/redis"
 
 	"github.com/gin-gonic/gin"
 )

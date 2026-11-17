@@ -3,7 +3,7 @@ package persistent
 import (
 	"testing"
 
-	domain "go-service-template/internal/domain/user"
+	domain "github.com/olx-india/go-service-template-clean-architecture/internal/domain/user"
 
 	"github.com/stretchr/testify/assert"
 )

@@ -3,7 +3,7 @@ package resolver
 import (
 	"testing"
 
-	"go-service-template/internal/infrastructure/config"
+	"github.com/olx-india/go-service-template-clean-architecture/internal/infrastructure/config"
 
 	"github.com/stretchr/testify/assert"
 )

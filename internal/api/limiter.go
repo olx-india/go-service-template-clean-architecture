@@ -3,10 +3,10 @@ package api
 import (
 	"net/http"
 
-	"go-service-template/internal/api/dto"
-	"go-service-template/internal/infrastructure/context"
-	"go-service-template/internal/infrastructure/logger"
-	limitPkg "go-service-template/internal/usecase/limit"
+	"github.com/olx-india/go-service-template-clean-architecture/internal/api/dto"
+	"github.com/olx-india/go-service-template-clean-architecture/internal/infrastructure/context"
+	"github.com/olx-india/go-service-template-clean-architecture/internal/infrastructure/logger"
+	limitPkg "github.com/olx-india/go-service-template-clean-architecture/internal/usecase/limit"
 
 	"github.com/gin-gonic/gin"
 )

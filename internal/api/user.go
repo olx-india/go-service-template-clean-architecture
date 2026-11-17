@@ -5,10 +5,10 @@ import (
 	"net/http"
 	"strconv"
 
-	"go-service-template/internal/api/dto"
-	ginContext "go-service-template/internal/infrastructure/context"
-	"go-service-template/internal/infrastructure/logger"
-	userPkg "go-service-template/internal/usecase/user"
+	"github.com/olx-india/go-service-template-clean-architecture/internal/api/dto"
+	ginContext "github.com/olx-india/go-service-template-clean-architecture/internal/infrastructure/context"
+	"github.com/olx-india/go-service-template-clean-architecture/internal/infrastructure/logger"
+	userPkg "github.com/olx-india/go-service-template-clean-architecture/internal/usecase/user"
 
 	"github.com/gin-gonic/gin"
 )

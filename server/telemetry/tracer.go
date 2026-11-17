@@ -4,8 +4,8 @@ import (
 	"context"
 	"log"
 
-	"go-service-template/internal/infrastructure/config"
-	"go-service-template/internal/infrastructure/logger"
+	"github.com/olx-india/go-service-template-clean-architecture/internal/infrastructure/config"
+	"github.com/olx-india/go-service-template-clean-architecture/internal/infrastructure/logger"
 
 	"go.opentelemetry.io/otel"
 	"go.opentelemetry.io/otel/exporters/otlp/otlptrace"

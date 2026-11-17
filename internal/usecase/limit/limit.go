@@ -1,8 +1,8 @@
 package limit
 
 import (
-	"go-service-template/internal/api/dto"
-	"go-service-template/internal/infrastructure/provider/redis"
+	"github.com/olx-india/go-service-template-clean-architecture/internal/api/dto"
+	"github.com/olx-india/go-service-template-clean-architecture/internal/infrastructure/provider/redis"
 )
 
 type UseCase struct {

@@ -1,4 +1,4 @@
-module go-service-template
+module github.com/olx-india/go-service-template-clean-architecture
 
 go 1.24.6
 

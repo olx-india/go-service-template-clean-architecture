@@ -1,6 +1,6 @@
 package limit
 
-import "go-service-template/internal/api/dto"
+import "github.com/olx-india/go-service-template-clean-architecture/internal/api/dto"
 
 func (s *UseCase) CheckLimit(req *dto.CheckLimitRequest) (dto.CheckLimitResponse, error) {
 	// Adopter: implement rate limiting with Redis.

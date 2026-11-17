@@ -3,9 +3,9 @@ package main
 import (
 	"context"
 
-	"go-service-template/internal/infrastructure/config"
-	"go-service-template/internal/infrastructure/logger"
-	appPkg "go-service-template/server/app"
+	"github.com/olx-india/go-service-template-clean-architecture/internal/infrastructure/config"
+	"github.com/olx-india/go-service-template-clean-architecture/internal/infrastructure/logger"
+	appPkg "github.com/olx-india/go-service-template-clean-architecture/server/app"
 )
 
 // @Title Go Service Template API

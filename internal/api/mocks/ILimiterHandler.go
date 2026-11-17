@@ -5,7 +5,7 @@
 package mocks
 
 import (
-	"go-service-template/internal/infrastructure/context"
+	"github.com/olx-india/go-service-template-clean-architecture/internal/infrastructure/context"
 
 	mock "github.com/stretchr/testify/mock"
 )

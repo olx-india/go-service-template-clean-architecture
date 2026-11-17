@@ -8,8 +8,8 @@ import (
 
 	"github.com/redis/go-redis/v9"
 
-	"go-service-template/internal/infrastructure/config"
-	"go-service-template/internal/infrastructure/logger"
+	"github.com/olx-india/go-service-template-clean-architecture/internal/infrastructure/config"
+	"github.com/olx-india/go-service-template-clean-architecture/internal/infrastructure/logger"
 )
 
 type Provider struct {

@@ -1,8 +1,8 @@
 package persistent
 
 import (
-	"go-service-template/internal/domain/user"
-	"go-service-template/internal/infrastructure/repo"
+	"github.com/olx-india/go-service-template-clean-architecture/internal/domain/user"
+	"github.com/olx-india/go-service-template-clean-architecture/internal/infrastructure/repo"
 )
 
 // userRepo is a stub repository. Replace with your database implementation.
