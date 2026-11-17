@@ -16,6 +16,7 @@ exclude_docs: |
 
 theme:
   name: material
+  custom_dir: overrides
   logo: assets/logo.svg
   favicon: assets/logo.svg
   palette:
@@ -86,6 +87,8 @@ markdown_extensions:
           format: !!python/name:pymdownx.superfences.fence_code_format
 
 extra:
+  # Google Search Console ownership check for the URL-prefix property
+  google_site_verification: fxHYijen_d4W46Y2YnUqH2-B4O1RXTfCUg9uEyMbPKw
   social:
     - icon: fontawesome/brands/github
       link: https://github.com/olx-india/go-service-template-clean-architecture
