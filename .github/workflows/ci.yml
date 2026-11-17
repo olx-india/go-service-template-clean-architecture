@@ -30,6 +30,26 @@ jobs:
           go-version: '1.26.11'
       - name: Run tests
         run: make test
+      - name: Upload coverage
+        uses: codecov/codecov-action@v7
+        with:
+          files: coverage.txt
+          use_oidc: true
+          fail_ci_if_error: false
+    permissions:
+      contents: read
+      id-token: write
+
+  vuln:
+    name: vuln
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-go@v6
+        with:
+          go-version: '1.26.11'
+      - name: govulncheck
+        run: make vuln
 
   docker-build:
     name: docker-build
