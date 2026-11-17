@@ -5,7 +5,7 @@ Thank you for contributing. This project is an opinionated scaffold—keep chang
 ## Getting started
 
 1. Fork the repository and clone your fork.
-2. Install Go 1.24.6+ and [Make](https://www.gnu.org/software/make/).
+2. Install Go 1.26.11+ and [Make](https://www.gnu.org/software/make/).
 3. Copy environment variables: `cp .env.example .env`
 4. Install tooling: `make bin-deps`
 5. Run the stack locally: `make compose-up` or `make run`

@@ -5,13 +5,13 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
-	"go-service-template/internal/usecase/limit/mocks"
+	"github.com/olx-india/go-service-template-clean-architecture/internal/usecase/limit/mocks"
 	"net/http"
 	"net/http/httptest"
 	"testing"
 
-	"go-service-template/internal/api/dto"
-	ginContext "go-service-template/internal/infrastructure/context"
+	"github.com/olx-india/go-service-template-clean-architecture/internal/api/dto"
+	ginContext "github.com/olx-india/go-service-template-clean-architecture/internal/infrastructure/context"
 
 	"github.com/gin-gonic/gin"
 	"github.com/stretchr/testify/assert"

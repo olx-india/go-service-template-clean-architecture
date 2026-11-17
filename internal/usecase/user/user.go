@@ -1,10 +1,10 @@
 package user
 
 import (
-	"go-service-template/internal/api/dto"
-	domain "go-service-template/internal/domain/user"
-	"go-service-template/internal/infrastructure/provider/redis"
-	"go-service-template/internal/infrastructure/repo"
+	"github.com/olx-india/go-service-template-clean-architecture/internal/api/dto"
+	domain "github.com/olx-india/go-service-template-clean-architecture/internal/domain/user"
+	"github.com/olx-india/go-service-template-clean-architecture/internal/infrastructure/provider/redis"
+	"github.com/olx-india/go-service-template-clean-architecture/internal/infrastructure/repo"
 )
 
 type UseCase struct {

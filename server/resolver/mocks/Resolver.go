@@ -5,7 +5,7 @@
 package mocks
 
 import (
-	"go-service-template/server/resolver"
+	"github.com/olx-india/go-service-template-clean-architecture/server/resolver"
 
 	mock "github.com/stretchr/testify/mock"
 )

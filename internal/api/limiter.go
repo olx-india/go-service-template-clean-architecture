@@ -3,12 +3,10 @@ package api
 import (
 	"net/http"
 
-	"go-service-template/internal/api/dto"
-	"go-service-template/internal/infrastructure/context"
-	"go-service-template/internal/infrastructure/logger"
-	limitPkg "go-service-template/internal/usecase/limit"
-
-	"github.com/gin-gonic/gin"
+	"github.com/olx-india/go-service-template-clean-architecture/internal/api/dto"
+	"github.com/olx-india/go-service-template-clean-architecture/internal/infrastructure/context"
+	"github.com/olx-india/go-service-template-clean-architecture/internal/infrastructure/logger"
+	limitPkg "github.com/olx-india/go-service-template-clean-architecture/internal/usecase/limit"
 )
 
 type ILimiterHandler interface {
@@ -93,9 +91,7 @@ func (api *limiterHandler) handleLimit(
 }
 
 func (api *limiterHandler) sendErrorResponse(ctx *context.GinContext, statusCode int, message string, err error) {
-	ctx.JSON(statusCode, gin.H{
-		"error": message + err.Error(),
-	})
+	ctx.JSON(statusCode, dto.ErrorResponse{Error: message + err.Error()})
 }
 
 func (api *limiterHandler) sendSuccessResponse(ctx *context.GinContext, statusCode int, data interface{}) {

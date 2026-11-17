@@ -3,7 +3,7 @@ package limit
 import (
 	"testing"
 
-	"go-service-template/internal/api/dto"
+	"github.com/olx-india/go-service-template-clean-architecture/internal/api/dto"
 
 	"github.com/stretchr/testify/assert"
 )

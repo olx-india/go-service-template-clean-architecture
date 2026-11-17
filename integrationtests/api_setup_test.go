@@ -6,7 +6,7 @@ import (
 	"testing"
 	"time"
 
-	appPkg "go-service-template/server/app"
+	appPkg "github.com/olx-india/go-service-template-clean-architecture/server/app"
 
 	"gopkg.in/h2non/baloo.v3"
 )

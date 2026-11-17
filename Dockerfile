@@ -1,5 +1,5 @@
 # Build stage
-FROM ${IMAGE_PREFIX}golang:1.24.6-alpine3.22 AS builder
+FROM ${IMAGE_PREFIX}golang:1.26.11-alpine3.24 AS builder
 
 # Install git and ca-certificates (needed for go mod download)
 RUN apk add --no-cache git ca-certificates

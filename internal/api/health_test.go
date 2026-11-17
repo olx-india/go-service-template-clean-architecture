@@ -7,8 +7,8 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"go-service-template/internal/infrastructure/config"
-	ginContext "go-service-template/internal/infrastructure/context"
+	"github.com/olx-india/go-service-template-clean-architecture/internal/infrastructure/config"
+	ginContext "github.com/olx-india/go-service-template-clean-architecture/internal/infrastructure/context"
 
 	"github.com/gin-gonic/gin"
 	"github.com/stretchr/testify/assert"

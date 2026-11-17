@@ -3,15 +3,15 @@ package resolver
 import (
 	"context"
 
-	"go-service-template/internal/api"
-	"go-service-template/internal/infrastructure/config"
-	"go-service-template/internal/infrastructure/logger"
-	"go-service-template/internal/infrastructure/provider/redis"
-	"go-service-template/internal/infrastructure/repo"
-	"go-service-template/internal/infrastructure/repo/persistent"
-	"go-service-template/internal/infrastructure/repo/webapi"
-	"go-service-template/internal/usecase/limit"
-	"go-service-template/internal/usecase/user"
+	"github.com/olx-india/go-service-template-clean-architecture/internal/api"
+	"github.com/olx-india/go-service-template-clean-architecture/internal/infrastructure/config"
+	"github.com/olx-india/go-service-template-clean-architecture/internal/infrastructure/logger"
+	"github.com/olx-india/go-service-template-clean-architecture/internal/infrastructure/provider/redis"
+	"github.com/olx-india/go-service-template-clean-architecture/internal/infrastructure/repo"
+	"github.com/olx-india/go-service-template-clean-architecture/internal/infrastructure/repo/persistent"
+	"github.com/olx-india/go-service-template-clean-architecture/internal/infrastructure/repo/webapi"
+	"github.com/olx-india/go-service-template-clean-architecture/internal/usecase/limit"
+	"github.com/olx-india/go-service-template-clean-architecture/internal/usecase/user"
 )
 
 type Resolver interface {

@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+## 1.1.0 - 2026-11-17
+
 ### Added
 
 - OpenAPI 3 generation with [go-swagger3](https://github.com/parvez3019/go-swagger3) and Swagger UI at `/swagger`
@@ -21,6 +23,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Go module path is now `github.com/olx-india/go-service-template-clean-architecture`
+- Go 1.26.11; upgraded golang.org/x/net, OpenTelemetry (v1.47.0), gRPC (v1.85.0) and Gin (v1.12.0) to clear govulncheck findings
+- `make vuln` runs `go tool govulncheck`, so no separate install is needed
+- README: badges, comparison with other Go templates, direct "Use this template" link
 - README rewritten as an honest scaffold (Apache 2.0 license, badges, Mermaid diagram)
 - SECURITY.md and CODE_OF_CONDUCT.md completed with private reporting contacts
 - `FetchUser` handler reads user ID from path parameter (`GET /api/v1/user/:id`)
@@ -32,13 +38,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Broken `mockgen` Makefile target paths and unused golang-migrate tool dependency
 
-## 1.0.1 - 2026-09-26
+## 1.0.1 - 2025-09-26
 
 ### Added
 
 - Add Open Telemetry instrumentation to the application
 
-## 1.0.0 - 2026-09-16
+## 1.0.0 - 2025-09-16
 
 ### Added
 

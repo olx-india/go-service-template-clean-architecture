@@ -53,7 +53,7 @@ swagger: ## generate OpenAPI 3 spec with go-swagger3
 .PHONY: swagger
 
 vuln: ## run govulncheck
-	govulncheck ./...
+	go tool govulncheck ./...
 .PHONY: vuln
 
 bin-deps: ## install tools

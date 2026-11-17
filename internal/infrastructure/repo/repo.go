@@ -1,6 +1,6 @@
 package repo
 
-import "go-service-template/internal/domain/user"
+import "github.com/olx-india/go-service-template-clean-architecture/internal/domain/user"
 
 // UserRepo interface for user repository operations.
 type UserRepo interface {

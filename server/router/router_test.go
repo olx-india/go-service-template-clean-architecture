@@ -5,9 +5,9 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"go-service-template/internal/infrastructure/config"
-	gincontext "go-service-template/internal/infrastructure/context"
-	"go-service-template/server/resolver"
+	"github.com/olx-india/go-service-template-clean-architecture/internal/infrastructure/config"
+	gincontext "github.com/olx-india/go-service-template-clean-architecture/internal/infrastructure/context"
+	"github.com/olx-india/go-service-template-clean-architecture/server/resolver"
 
 	"github.com/gin-gonic/gin"
 	"github.com/stretchr/testify/assert"

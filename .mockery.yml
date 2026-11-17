@@ -12,4 +12,4 @@ require-template-schema-exists: true
 template: testify
 template-schema: '{{.Template}}.schema.json'
 packages:
-  go-service-template:
+  github.com/olx-india/go-service-template-clean-architecture:

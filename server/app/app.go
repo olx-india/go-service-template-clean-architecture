@@ -9,11 +9,11 @@ import (
 	"syscall"
 	"time"
 
-	"go-service-template/internal/infrastructure/config"
-	"go-service-template/internal/infrastructure/logger"
-	"go-service-template/server/resolver"
-	routerPkg "go-service-template/server/router"
-	"go-service-template/server/telemetry"
+	"github.com/olx-india/go-service-template-clean-architecture/internal/infrastructure/config"
+	"github.com/olx-india/go-service-template-clean-architecture/internal/infrastructure/logger"
+	"github.com/olx-india/go-service-template-clean-architecture/server/resolver"
+	routerPkg "github.com/olx-india/go-service-template-clean-architecture/server/router"
+	"github.com/olx-india/go-service-template-clean-architecture/server/telemetry"
 
 	"github.com/gin-gonic/gin"
 )
