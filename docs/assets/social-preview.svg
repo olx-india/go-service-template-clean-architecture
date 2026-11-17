@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="640" viewBox="0 0 1280 640">
+  <defs>
+    <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M0 0L10 5L0 10z" fill="#7DD3FC"/>
+    </marker>
+  </defs>
+  <rect width="1280" height="640" fill="#0B1220"/>
+  <rect x="0" y="0" width="1280" height="8" fill="#00ADD8"/>
+
+  <!-- Left: text -->
+  <g font-family="Helvetica Neue, Helvetica, Arial, sans-serif">
+    <text x="80" y="128" font-size="24" fill="#94A3B8" letter-spacing="1">OPEN SOURCE · GO TEMPLATE</text>
+    <text x="80" y="222" font-size="68" font-weight="700" fill="#F8FAFC">Go Service Template</text>
+    <text x="80" y="302" font-size="68" font-weight="700" fill="#00ADD8">Clean Architecture</text>
+    <text x="80" y="366" font-size="28" fill="#CBD5E1">A small, runnable starting point for Go microservices</text>
+
+    <g font-size="22" font-weight="500" fill="#E2E8F0">
+      <rect x="80"  y="414" width="74"  height="44" rx="22" fill="none" stroke="#334155" stroke-width="2"/>
+      <text x="117" y="443" text-anchor="middle">Gin</text>
+      <rect x="168" y="414" width="182" height="44" rx="22" fill="none" stroke="#334155" stroke-width="2"/>
+      <text x="259" y="443" text-anchor="middle">OpenTelemetry</text>
+      <rect x="364" y="414" width="96"  height="44" rx="22" fill="none" stroke="#334155" stroke-width="2"/>
+      <text x="412" y="443" text-anchor="middle">Redis</text>
+      <rect x="474" y="414" width="140" height="44" rx="22" fill="none" stroke="#334155" stroke-width="2"/>
+      <text x="544" y="443" text-anchor="middle">OpenAPI 3</text>
+      <rect x="628" y="414" width="110" height="44" rx="22" fill="none" stroke="#334155" stroke-width="2"/>
+      <text x="683" y="443" text-anchor="middle">Docker</text>
+    </g>
+  </g>
+  <text x="80" y="566" font-family="Menlo, monospace" font-size="21" fill="#64748B">github.com/olx-india/go-service-template-clean-architecture</text>
+
+  <!-- Right: layers -->
+  <g font-family="Helvetica Neue, Helvetica, Arial, sans-serif" text-anchor="middle">
+    <circle cx="1050" cy="320" r="200" fill="#111C30" stroke="#334155" stroke-width="2"/>
+    <circle cx="1050" cy="320" r="142" fill="#13263F" stroke="#3B5574" stroke-width="2"/>
+    <circle cx="1050" cy="320" r="84"  fill="#00ADD8" fill-opacity="0.18" stroke="#00ADD8" stroke-width="3"/>
+    <text x="1050" y="158" font-size="19" fill="#94A3B8">API · Infrastructure</text>
+    <text x="1050" y="216" font-size="21" fill="#CBD5E1">Use cases</text>
+    <text x="1050" y="328" font-size="26" font-weight="700" fill="#F8FAFC">Domain</text>
+    <path d="M1050 548 V 532" stroke="none"/>
+    <path d="M868 470 L 980 390" stroke="#7DD3FC" stroke-width="2.5" fill="none" marker-end="url(#arr)"/>
+    <path d="M1232 470 L 1120 390" stroke="#7DD3FC" stroke-width="2.5" fill="none" marker-end="url(#arr)"/>
+    <text x="1050" y="566" font-size="21" fill="#7DD3FC">dependencies point inward</text>
+  </g>
+</svg>
