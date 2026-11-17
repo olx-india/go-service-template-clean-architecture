@@ -87,7 +87,7 @@ const (
 	DefaultPort         = "8080"
 	DefaultReadTimeout  = 60 * time.Second
 	DefaultWriteTimeout = 60 * time.Second
-	DefaultRedisHost    = "localhost"
+	DefaultRedisHost    = "localhost:6379"
 	DefaultAppName      = "go-service-template"
 	DefaultOTLPEndpoint = "localhost:4317"
 	DefaultOTELEnabled  = false

@@ -21,8 +21,8 @@ deps: ## deps tidy + verify
 	go mod tidy && go mod verify
 .PHONY: deps
 
-run: ## run the application
-	go run ./cmd/main.go
+run: ## run the application (exports .env when present)
+	@if [ -f .env ]; then set -a; . ./.env; set +a; fi; go run ./cmd/main.go
 .PHONY: run
 
 format: ## format code with gofumpt
