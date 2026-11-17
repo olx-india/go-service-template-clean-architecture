@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>API reference · Go Service Template</title>
+  <meta name="description" content="Interactive OpenAPI 3 reference for the Go Service Template sample API: health probes, users and rate limits.">
+  <link rel="icon" href="../assets/logo.svg">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swagger-ui-dist@5.34.1/swagger-ui.css"
+        integrity="sha384-4c3vsE5f+trhFyHrFrLM1fFGUn531NIaC7dcqEWIJdoRQJ5CkJbSuSCwXLpaS1KF" crossorigin="anonymous">
+  <style>
+    body { margin: 0; background: #fff; }
+    .back { font: 14px/1.4 -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; padding: 12px 20px; border-bottom: 1px solid #e5e7eb; }
+    .back a { color: #0891b2; text-decoration: none; }
+  </style>
+</head>
+<body>
+  <div class="back"><a href="../">← Back to the documentation</a> · <a href="oas.json">Download oas.json</a></div>
+  <div id="swagger-ui"></div>
+  <script src="https://cdn.jsdelivr.net/npm/swagger-ui-dist@5.34.1/swagger-ui-bundle.js"
+          integrity="sha384-XFYN47VzPiDY6qPtxYKg0nqUeW/upo20xf1j2SUE7gT/i35FJB4cuS/71Iegzk8Z" crossorigin="anonymous"></script>
+  <script>
+    window.ui = SwaggerUIBundle({
+      url: "oas.json",
+      dom_id: "#swagger-ui",
+      deepLinking: true,
+      // The hosted docs have no running service behind them, so "Try it out" is off.
+      supportedSubmitMethods: []
+    });
+  </script>
+</body>
+</html>

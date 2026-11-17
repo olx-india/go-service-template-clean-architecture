@@ -21,8 +21,8 @@ Invalid values fall back to the default without an error: a `READ_TIMEOUT` of `a
 
 ## Example files
 
-- [`.env.example`](../.env.example) — local development values; copy it to `.env`
-- [`docker-compose.yml`](../docker-compose.yml) — values for the Compose stack (Redis and Jaeger by service name, tracing on)
+- [`.env.example`](https://github.com/olx-india/go-service-template-clean-architecture/blob/main/.env.example) — local development values; copy it to `.env`
+- [`docker-compose.yml`](https://github.com/olx-india/go-service-template-clean-architecture/blob/main/docker-compose.yml) — values for the Compose stack (Redis and Jaeger by service name, tracing on)
 
 ## Redis
 

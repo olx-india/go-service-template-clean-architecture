@@ -7,11 +7,12 @@
 [![Go Report Card](https://goreportcard.com/badge/github.com/olx-india/go-service-template-clean-architecture)](https://goreportcard.com/report/github.com/olx-india/go-service-template-clean-architecture)
 [![codecov](https://codecov.io/gh/olx-india/go-service-template-clean-architecture/graph/badge.svg)](https://codecov.io/gh/olx-india/go-service-template-clean-architecture)
 [![Release](https://img.shields.io/github/v/release/olx-india/go-service-template-clean-architecture)](https://github.com/olx-india/go-service-template-clean-architecture/releases)
+[![Docs](https://img.shields.io/badge/docs-github.io-0891b2)](https://olx-india.github.io/go-service-template-clean-architecture/)
 [![Stars](https://img.shields.io/github/stars/olx-india/go-service-template-clean-architecture?style=social)](https://github.com/olx-india/go-service-template-clean-architecture/stargazers)
 
 A small **Go microservice template** built on Clean Architecture: Gin HTTP server, dependency injection, Zap logging, OpenTelemetry tracing, Redis, and OpenAPI 3 with Swagger UI, ready to run with Docker Compose.
 
-**[Create a repository from this template →](https://github.com/olx-india/go-service-template-clean-architecture/generate)**
+**[Create a repository from this template →](https://github.com/olx-india/go-service-template-clean-architecture/generate)** · **[Read the docs →](https://olx-india.github.io/go-service-template-clean-architecture/)**
 
 ![Go Service Template: Clean Architecture](docs/assets/social-preview.png)
 
@@ -61,6 +62,8 @@ curl -s localhost:8080/health
 Redis is optional when running locally; without it the service starts and logs a warning. [Getting started](docs/getting-started.md) covers prerequisites, sample requests and common problems.
 
 ## Documentation
+
+Browse the guides at **[olx-india.github.io/go-service-template-clean-architecture/](https://olx-india.github.io/go-service-template-clean-architecture/)** or in [`docs/`](docs/):
 
 | Guide | |
 |-------|---|

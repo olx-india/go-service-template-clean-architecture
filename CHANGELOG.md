@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Guides in `docs/`: getting started, architecture, configuration, API, observability, testing, deployment, adding a feature
 - Social preview image in `docs/assets/`
+- Documentation site on GitHub Pages (MkDocs Material), with a hosted Swagger UI, deployed by `.github/workflows/docs.yml`
 
 ### Changed
 

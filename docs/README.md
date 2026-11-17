@@ -2,6 +2,8 @@
 
 Guides for running, understanding and building on the Go Service Template.
 
+These pages are also published at **[https://olx-india.github.io/go-service-template-clean-architecture/](https://olx-india.github.io/go-service-template-clean-architecture/)**, built from this folder by `.github/workflows/docs.yml`. Preview locally with `pip install -r docs/requirements.txt && mkdocs serve`.
+
 ## Start here
 
 | Guide | Read it when you want to… |
