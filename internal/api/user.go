@@ -9,8 +9,6 @@ import (
 	ginContext "github.com/olx-india/go-service-template-clean-architecture/internal/infrastructure/context"
 	"github.com/olx-india/go-service-template-clean-architecture/internal/infrastructure/logger"
 	userPkg "github.com/olx-india/go-service-template-clean-architecture/internal/usecase/user"
-
-	"github.com/gin-gonic/gin"
 )
 
 type IUserHandler interface {
@@ -117,9 +115,7 @@ func (api *userHandler) logAndSendSuccess(logCtx context.Context, ctx *ginContex
 
 // sendErrorResponse is a helper function to send error responses.
 func (api *userHandler) sendErrorResponse(ctx *ginContext.GinContext, statusCode int, message string, err error) {
-	ctx.JSON(statusCode, gin.H{
-		"error": message + err.Error(),
-	})
+	ctx.JSON(statusCode, dto.ErrorResponse{Error: message + err.Error()})
 }
 
 // sendSuccessResponse is a helper function to send success responses.

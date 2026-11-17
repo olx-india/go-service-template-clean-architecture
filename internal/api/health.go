@@ -5,12 +5,11 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/olx-india/go-service-template-clean-architecture/internal/api/dto"
 	"github.com/olx-india/go-service-template-clean-architecture/internal/infrastructure/config"
 	gincontext "github.com/olx-india/go-service-template-clean-architecture/internal/infrastructure/context"
 	"github.com/olx-india/go-service-template-clean-architecture/internal/infrastructure/logger"
 	"github.com/olx-india/go-service-template-clean-architecture/internal/infrastructure/provider/redis"
-
-	"github.com/gin-gonic/gin"
 )
 
 type HealthHandler struct {
@@ -64,10 +63,10 @@ func (h *HealthHandler) Ready(ctx *gincontext.GinContext) {
 
 		if err := h.redis.Ping(pingCtx); err != nil {
 			logger.Error(logCtx, "Readiness check failed", logger.ErrorField(logger.FieldError, err))
-			ctx.JSON(http.StatusServiceUnavailable, gin.H{
-				"status":  "not_ready",
-				"service": h.appName,
-				"error":   "redis unavailable",
+			ctx.JSON(http.StatusServiceUnavailable, dto.NotReadyResponse{
+				Status:  "not_ready",
+				Service: h.appName,
+				Error:   "redis unavailable",
 			})
 			return
 		}
@@ -80,9 +79,9 @@ func (h *HealthHandler) respondOK(ctx *gincontext.GinContext) {
 	logCtx := logger.GetLogContext(ctx.Context)
 	logger.Info(logCtx, "Health check requested", logger.Int(logger.FieldStatusCode, http.StatusOK))
 
-	ctx.JSON(http.StatusOK, gin.H{
-		"status":  "ok",
-		"service": h.appName,
+	ctx.JSON(http.StatusOK, dto.HealthResponse{
+		Status:  "ok",
+		Service: h.appName,
 	})
 }
 
