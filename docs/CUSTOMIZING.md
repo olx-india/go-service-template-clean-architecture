@@ -20,6 +20,9 @@ Update these non-Go references:
 - `APP_NAME` in `.env` / `.env.example`
 - Docker image name in `docker-compose.yml` and README
 - Health check `service` field (via `APP_NAME`)
+- `serviceName` in `internal/infrastructure/logger/global.go` (the `service` field in every log line)
+- `semconv.ServiceVersion` in `server/telemetry/tracer.go`
+- `DefaultAppName` in `internal/infrastructure/config/config.go`
 - GitHub URLs in README, CONTRIBUTING, and SECURITY
 
 ## 2. Update GitHub metadata
@@ -58,6 +61,8 @@ Follow the existing pattern:
 8. **Test** — unit tests per layer; integration test in `integrationtests/`
 
 Look for `Adopter:` comments in the resolver and use cases for extension points.
+
+[Adding a feature](adding-a-feature.md) walks through these steps with a complete example.
 
 ## 5. Verify locally
 

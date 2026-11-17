@@ -76,7 +76,7 @@ func (r *resolver) resolveProviders() *resolver {
 		logger.Error(ctx, "Please check your Redis configuration and ensure Redis is running")
 		logger.Error(ctx, "For local development, you can:")
 		logger.Error(ctx, "1. Start Redis locally: docker run -d -p 6379:6379 redis:alpine")
-		logger.Error(ctx, "2. Or set REDIS_HOST=localhost in your environment")
+		logger.Error(ctx, "2. Or set REDIS_HOST=<host>:<port> in your environment")
 		return nil
 	}
 	r.redisProvider = redisProvider

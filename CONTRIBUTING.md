@@ -58,4 +58,6 @@ This project follows the [Contributor Covenant](CODE_OF_CONDUCT.md). Report unac
 
 ## Questions
 
-Open a [GitHub issue](https://github.com/olx-india/go-service-template-clean-architecture/issues) for bugs, feature requests, or questions.
+Ask questions in [Discussions](https://github.com/olx-india/go-service-template-clean-architecture/discussions). Open an [issue](https://github.com/olx-india/go-service-template-clean-architecture/issues) for bugs and feature requests.
+
+New to the codebase? Start with [docs/architecture.md](docs/architecture.md) and [docs/testing.md](docs/testing.md).

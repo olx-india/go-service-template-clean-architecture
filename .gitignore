@@ -48,3 +48,6 @@ coverage.out.tmp
 coverage.txt
 
 go.list
+
+# MkDocs build output
+site/
