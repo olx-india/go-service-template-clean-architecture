@@ -14,10 +14,10 @@ All configuration comes from environment variables, read once at startup by `int
 | `ENV` | `local` | Environment name, attached to traces as `deployment.environment` |
 | `LOG_LEVEL` | `info` | `debug`, `info`, `warn` or `error`; anything else means `info` |
 | `REDIS_HOST` | `localhost:6379` | Redis address as `host:port` |
-| `OTEL_ENABLED` | `false` | `true` or `1` turns on OpenTelemetry tracing |
+| `OTEL_ENABLED` | `false` | Accepts `1`, `t`, `T`, `true`, `TRUE`, `True` and the corresponding false forms accepted by Go `strconv.ParseBool` |
 | `OTLP_ENDPOINT` | `localhost:4317` | OTLP gRPC collector address, e.g. Jaeger |
 
-Invalid values fall back to the default without an error: a `READ_TIMEOUT` of `abc` becomes `60s`. Validate stricter requirements at startup in your fork (see [Extending](EXTENDING.md#configuration-validation)).
+Invalid duration and boolean values emit a startup warning with the variable name, value, and default, then fall back to that default: a `READ_TIMEOUT` of `abc` becomes `60s`. Empty or unset values use the default without a warning. Validate stricter requirements at startup in your fork (see [Extending](EXTENDING.md#configuration-validation)).
 
 ## Example files
 

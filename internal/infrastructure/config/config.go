@@ -1,7 +1,9 @@
 package config
 
 import (
+	"log"
 	"os"
+	"strconv"
 	"time"
 )
 
@@ -33,7 +35,7 @@ func NewConfig() *Config {
 			ReadTimeout:  getEnvAsDuration(EnvReadTimeout, DefaultReadTimeout),
 			WriteTimeout: getEnvAsDuration(EnvWriteTimeout, DefaultWriteTimeout),
 			AppName:      getEnv(EnvAppName, DefaultAppName),
-			OTLPEndpoint: getEnv(EnvOLTPEndpoint, DefaultOTLPEndpoint),
+			OTLPEndpoint: getEnv(EnvOTLPEndpoint, DefaultOTLPEndpoint),
 			OTELEnabled:  getEnvAsBool(EnvOTELEnabled, DefaultOTELEnabled),
 		},
 		Redis: RedisConfig{
@@ -55,13 +57,17 @@ func getEnvAsDuration(key string, fallback time.Duration) time.Duration {
 		if duration, err := time.ParseDuration(value); err == nil {
 			return duration
 		}
+		log.Printf("warning: invalid %s value %s; using default %s", key, strconv.Quote(value), fallback)
 	}
 	return fallback
 }
 
 func getEnvAsBool(key string, fallback bool) bool {
 	if value := os.Getenv(key); value != EmptyString {
-		return value == "true" || value == "1"
+		if parsed, err := strconv.ParseBool(value); err == nil {
+			return parsed
+		}
+		log.Printf("warning: invalid %s value %s; using default %t", key, strconv.Quote(value), fallback)
 	}
 	return fallback
 }
@@ -78,7 +84,7 @@ const (
 	EnvRedisHost    = "REDIS_HOST"
 	EnvEnvironment  = "ENV"
 	EnvAppName      = "APP_NAME"
-	EnvOLTPEndpoint = "OTLP_ENDPOINT"
+	EnvOTLPEndpoint = "OTLP_ENDPOINT"
 	EnvOTELEnabled  = "OTEL_ENABLED"
 )
 
