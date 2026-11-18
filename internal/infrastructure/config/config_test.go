@@ -1,7 +1,10 @@
 package config
 
 import (
+	"bytes"
+	"log"
 	"os"
+	"strconv"
 	"testing"
 	"time"
 
@@ -151,4 +154,65 @@ func TestProvider_GetAppName_Value(t *testing.T) {
 	t.Setenv(EnvAppName, "a")
 	c := NewConfig()
 	assert.Equal(t, "a", c.GetAppName())
+}
+
+func TestConfigParsing(t *testing.T) {
+	for _, tc := range []struct {
+		name    string
+		value   string
+		want    time.Duration
+		warning bool
+	}{
+		{"unset", "", 3 * time.Second, false},
+		{"valid", "5s", 5 * time.Second, false},
+		{"invalid", "30", 3 * time.Second, true},
+		{"newline", "30\nforged", 3 * time.Second, true},
+	} {
+		t.Run("duration/"+tc.name, func(t *testing.T) {
+			t.Setenv(EnvReadTimeout, tc.value)
+			if tc.name == "unset" {
+				assert.NoError(t, os.Unsetenv(EnvReadTimeout))
+			}
+			var output bytes.Buffer
+			old := log.Writer()
+			log.SetOutput(&output)
+			t.Cleanup(func() { log.SetOutput(old) })
+			assert.Equal(t, tc.want, getEnvAsDuration(EnvReadTimeout, 3*time.Second))
+			if tc.warning {
+				assert.Contains(t, output.String(), EnvReadTimeout)
+				assert.Contains(t, output.String(), strconv.Quote(tc.value))
+				assert.Contains(t, output.String(), "3s")
+			} else {
+				assert.Empty(t, output.String())
+			}
+		})
+	}
+	for _, tc := range []struct {
+		name, value   string
+		want, warning bool
+	}{
+		{"unset", "", true, false},
+		{"true uppercase", "TRUE", true, false},
+		{"false", "0", false, false},
+		{"invalid", "yes", true, true},
+	} {
+		t.Run("bool/"+tc.name, func(t *testing.T) {
+			t.Setenv(EnvOTELEnabled, tc.value)
+			if tc.name == "unset" {
+				assert.NoError(t, os.Unsetenv(EnvOTELEnabled))
+			}
+			var output bytes.Buffer
+			old := log.Writer()
+			log.SetOutput(&output)
+			t.Cleanup(func() { log.SetOutput(old) })
+			assert.Equal(t, tc.want, getEnvAsBool(EnvOTELEnabled, true))
+			if tc.warning {
+				assert.Contains(t, output.String(), EnvOTELEnabled)
+				assert.Contains(t, output.String(), tc.value)
+				assert.Contains(t, output.String(), "true")
+			} else {
+				assert.Empty(t, output.String())
+			}
+		})
+	}
 }

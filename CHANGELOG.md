@@ -15,6 +15,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Invalid duration and boolean settings now produce a warning before using defaults; standard Go boolean forms are accepted.
+
 - README reorganized around a quick start and a documentation index
 - `make run` exports `.env` when present
 - Default `REDIS_HOST` is now `localhost:6379` (was `localhost`, which has no port and never connected)
