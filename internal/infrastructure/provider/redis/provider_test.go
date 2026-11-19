@@ -29,3 +29,11 @@ func TestProvider_GetClient_NilUntilConnected(t *testing.T) {
 	p := &Provider{client: nil}
 	assert.Nil(t, p.GetClient())
 }
+
+func TestProvider_LimitOperations_WithoutClient_ReturnError(t *testing.T) {
+	p := &Provider{}
+
+	_, err := p.LimitAvailable(1)
+	assert.ErrorIs(t, err, errRedisNotConfigured)
+	assert.ErrorIs(t, p.ResetLimit(1), errRedisNotConfigured)
+}

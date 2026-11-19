@@ -5,10 +5,12 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
-	"github.com/olx-india/go-service-template-clean-architecture/internal/usecase/limit/mocks"
 	"net/http"
 	"net/http/httptest"
 	"testing"
+
+	limitPkg "github.com/olx-india/go-service-template-clean-architecture/internal/usecase/limit"
+	"github.com/olx-india/go-service-template-clean-architecture/internal/usecase/limit/mocks"
 
 	"github.com/olx-india/go-service-template-clean-architecture/internal/api/dto"
 	ginContext "github.com/olx-india/go-service-template-clean-architecture/internal/infrastructure/context"
@@ -34,7 +36,7 @@ func TestLimiterHandler_CheckLimit_ValidRequest_ReturnsSuccessResponse(t *testin
 		UserID:         123,
 		LimitAvailable: 100,
 	}
-	mockUseCase.On("CheckLimit", mock.AnythingOfType("*dto.CheckLimitRequest")).Return(expectedResponse, nil)
+	mockUseCase.On("CheckLimit", mock.AnythingOfType("*limit.CheckLimitInput")).Return(limitPkg.Result{UserID: expectedResponse.UserID, LimitAvailable: expectedResponse.LimitAvailable}, nil)
 	w, ginCtx := setupLimiterTestContextWithJSON(t, dto.CheckLimitRequest{UserID: 123})
 
 	handler.CheckLimit(ginCtx)
@@ -124,7 +126,7 @@ func TestLimiterHandler_CheckLimit_UseCaseError_ReturnsInternalServerError(t *te
 			mockUseCase := &mocks.ILimitUseCase{}
 			handler := NewLimiterHandler(mockUseCase)
 
-			mockUseCase.On("CheckLimit", mock.AnythingOfType("*dto.CheckLimitRequest")).Return(dto.CheckLimitResponse{}, tt.useCaseError)
+			mockUseCase.On("CheckLimit", mock.AnythingOfType("*limit.CheckLimitInput")).Return(limitPkg.Result{}, tt.useCaseError)
 
 			w, ginCtx := setupLimiterTestContextWithJSON(t, dto.CheckLimitRequest{UserID: 123})
 
@@ -150,7 +152,6 @@ func TestLimiterHandler_CheckLimit_ValidUserIDs_ReturnsSuccessResponse(t *testin
 		expectedResponse dto.CheckLimitResponse
 	}{
 		{
-
 			name:   "MinValidUserID",
 			userID: 1,
 			expectedResponse: dto.CheckLimitResponse{
@@ -189,7 +190,7 @@ func TestLimiterHandler_CheckLimit_ValidUserIDs_ReturnsSuccessResponse(t *testin
 			mockUseCase := &mocks.ILimitUseCase{}
 			handler := NewLimiterHandler(mockUseCase)
 
-			mockUseCase.On("CheckLimit", mock.AnythingOfType("*dto.CheckLimitRequest")).Return(tt.expectedResponse, nil)
+			mockUseCase.On("CheckLimit", mock.AnythingOfType("*limit.CheckLimitInput")).Return(limitPkg.Result{UserID: tt.expectedResponse.UserID, LimitAvailable: tt.expectedResponse.LimitAvailable}, nil)
 
 			w, ginCtx := setupLimiterTestContextWithJSON(t, dto.CheckLimitRequest{UserID: tt.userID})
 

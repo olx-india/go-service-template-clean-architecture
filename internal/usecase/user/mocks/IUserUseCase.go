@@ -5,9 +5,8 @@
 package mocks
 
 import (
-	"github.com/olx-india/go-service-template-clean-architecture/internal/api/dto"
-	"github.com/olx-india/go-service-template-clean-architecture/internal/domain/user"
-
+	user0 "github.com/olx-india/go-service-template-clean-architecture/internal/domain/user"
+	"github.com/olx-india/go-service-template-clean-architecture/internal/usecase/user"
 	mock "github.com/stretchr/testify/mock"
 )
 
@@ -17,10 +16,19 @@ func NewIUserUseCase(t interface {
 	mock.TestingT
 	Cleanup(func())
 }) *IUserUseCase {
+	if helper, ok := t.(interface{ Helper() }); ok {
+		helper.Helper()
+	}
+
 	mock := &IUserUseCase{}
 	mock.Mock.Test(t)
 
-	t.Cleanup(func() { mock.AssertExpectations(t) })
+	t.Cleanup(func() {
+		if helper, ok := t.(interface{ Helper() }); ok {
+			helper.Helper()
+		}
+		mock.AssertExpectations(t)
+	})
 
 	return mock
 }
@@ -39,27 +47,27 @@ func (_m *IUserUseCase) EXPECT() *IUserUseCase_Expecter {
 }
 
 // CreateUserRequest provides a mock function for the type IUserUseCase
-func (_mock *IUserUseCase) CreateUserRequest(req *dto.CreateUserRequest) (*user.User, error) {
-	ret := _mock.Called(req)
+func (_mock *IUserUseCase) CreateUserRequest(input *user.CreateUserInput) (*user0.User, error) {
+	ret := _mock.Called(input)
 
 	if len(ret) == 0 {
 		panic("no return value specified for CreateUserRequest")
 	}
 
-	var r0 *user.User
+	var r0 *user0.User
 	var r1 error
-	if returnFunc, ok := ret.Get(0).(func(*dto.CreateUserRequest) (*user.User, error)); ok {
-		return returnFunc(req)
+	if returnFunc, ok := ret.Get(0).(func(*user.CreateUserInput) (*user0.User, error)); ok {
+		return returnFunc(input)
 	}
-	if returnFunc, ok := ret.Get(0).(func(*dto.CreateUserRequest) *user.User); ok {
-		r0 = returnFunc(req)
+	if returnFunc, ok := ret.Get(0).(func(*user.CreateUserInput) *user0.User); ok {
+		r0 = returnFunc(input)
 	} else {
 		if ret.Get(0) != nil {
-			r0 = ret.Get(0).(*user.User)
+			r0 = ret.Get(0).(*user0.User)
 		}
 	}
-	if returnFunc, ok := ret.Get(1).(func(*dto.CreateUserRequest) error); ok {
-		r1 = returnFunc(req)
+	if returnFunc, ok := ret.Get(1).(func(*user.CreateUserInput) error); ok {
+		r1 = returnFunc(input)
 	} else {
 		r1 = ret.Error(1)
 	}
@@ -72,16 +80,16 @@ type IUserUseCase_CreateUserRequest_Call struct {
 }
 
 // CreateUserRequest is a helper method to define mock.On call
-//   - req *dto.CreateUserRequest
-func (_e *IUserUseCase_Expecter) CreateUserRequest(req interface{}) *IUserUseCase_CreateUserRequest_Call {
-	return &IUserUseCase_CreateUserRequest_Call{Call: _e.mock.On("CreateUserRequest", req)}
+//   - input *user.CreateUserInput
+func (_e *IUserUseCase_Expecter) CreateUserRequest(input any) *IUserUseCase_CreateUserRequest_Call {
+	return &IUserUseCase_CreateUserRequest_Call{Call: _e.mock.On("CreateUserRequest", input)}
 }
 
-func (_c *IUserUseCase_CreateUserRequest_Call) Run(run func(req *dto.CreateUserRequest)) *IUserUseCase_CreateUserRequest_Call {
+func (_c *IUserUseCase_CreateUserRequest_Call) Run(run func(input *user.CreateUserInput)) *IUserUseCase_CreateUserRequest_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		var arg0 *dto.CreateUserRequest
+		var arg0 *user.CreateUserInput
 		if args[0] != nil {
-			arg0 = args[0].(*dto.CreateUserRequest)
+			arg0 = args[0].(*user.CreateUserInput)
 		}
 		run(
 			arg0,
@@ -90,38 +98,38 @@ func (_c *IUserUseCase_CreateUserRequest_Call) Run(run func(req *dto.CreateUserR
 	return _c
 }
 
-func (_c *IUserUseCase_CreateUserRequest_Call) Return(user1 *user.User, err error) *IUserUseCase_CreateUserRequest_Call {
+func (_c *IUserUseCase_CreateUserRequest_Call) Return(user1 *user0.User, err error) *IUserUseCase_CreateUserRequest_Call {
 	_c.Call.Return(user1, err)
 	return _c
 }
 
-func (_c *IUserUseCase_CreateUserRequest_Call) RunAndReturn(run func(req *dto.CreateUserRequest) (*user.User, error)) *IUserUseCase_CreateUserRequest_Call {
+func (_c *IUserUseCase_CreateUserRequest_Call) RunAndReturn(run func(input *user.CreateUserInput) (*user0.User, error)) *IUserUseCase_CreateUserRequest_Call {
 	_c.Call.Return(run)
 	return _c
 }
 
 // FetchUser provides a mock function for the type IUserUseCase
-func (_mock *IUserUseCase) FetchUser(req *dto.FetchUserRequest) (*user.User, error) {
-	ret := _mock.Called(req)
+func (_mock *IUserUseCase) FetchUser(input *user.FetchUserInput) (*user0.User, error) {
+	ret := _mock.Called(input)
 
 	if len(ret) == 0 {
 		panic("no return value specified for FetchUser")
 	}
 
-	var r0 *user.User
+	var r0 *user0.User
 	var r1 error
-	if returnFunc, ok := ret.Get(0).(func(*dto.FetchUserRequest) (*user.User, error)); ok {
-		return returnFunc(req)
+	if returnFunc, ok := ret.Get(0).(func(*user.FetchUserInput) (*user0.User, error)); ok {
+		return returnFunc(input)
 	}
-	if returnFunc, ok := ret.Get(0).(func(*dto.FetchUserRequest) *user.User); ok {
-		r0 = returnFunc(req)
+	if returnFunc, ok := ret.Get(0).(func(*user.FetchUserInput) *user0.User); ok {
+		r0 = returnFunc(input)
 	} else {
 		if ret.Get(0) != nil {
-			r0 = ret.Get(0).(*user.User)
+			r0 = ret.Get(0).(*user0.User)
 		}
 	}
-	if returnFunc, ok := ret.Get(1).(func(*dto.FetchUserRequest) error); ok {
-		r1 = returnFunc(req)
+	if returnFunc, ok := ret.Get(1).(func(*user.FetchUserInput) error); ok {
+		r1 = returnFunc(input)
 	} else {
 		r1 = ret.Error(1)
 	}
@@ -134,16 +142,16 @@ type IUserUseCase_FetchUser_Call struct {
 }
 
 // FetchUser is a helper method to define mock.On call
-//   - req *dto.FetchUserRequest
-func (_e *IUserUseCase_Expecter) FetchUser(req interface{}) *IUserUseCase_FetchUser_Call {
-	return &IUserUseCase_FetchUser_Call{Call: _e.mock.On("FetchUser", req)}
+//   - input *user.FetchUserInput
+func (_e *IUserUseCase_Expecter) FetchUser(input any) *IUserUseCase_FetchUser_Call {
+	return &IUserUseCase_FetchUser_Call{Call: _e.mock.On("FetchUser", input)}
 }
 
-func (_c *IUserUseCase_FetchUser_Call) Run(run func(req *dto.FetchUserRequest)) *IUserUseCase_FetchUser_Call {
+func (_c *IUserUseCase_FetchUser_Call) Run(run func(input *user.FetchUserInput)) *IUserUseCase_FetchUser_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		var arg0 *dto.FetchUserRequest
+		var arg0 *user.FetchUserInput
 		if args[0] != nil {
-			arg0 = args[0].(*dto.FetchUserRequest)
+			arg0 = args[0].(*user.FetchUserInput)
 		}
 		run(
 			arg0,
@@ -152,12 +160,12 @@ func (_c *IUserUseCase_FetchUser_Call) Run(run func(req *dto.FetchUserRequest)) 
 	return _c
 }
 
-func (_c *IUserUseCase_FetchUser_Call) Return(user1 *user.User, err error) *IUserUseCase_FetchUser_Call {
+func (_c *IUserUseCase_FetchUser_Call) Return(user1 *user0.User, err error) *IUserUseCase_FetchUser_Call {
 	_c.Call.Return(user1, err)
 	return _c
 }
 
-func (_c *IUserUseCase_FetchUser_Call) RunAndReturn(run func(req *dto.FetchUserRequest) (*user.User, error)) *IUserUseCase_FetchUser_Call {
+func (_c *IUserUseCase_FetchUser_Call) RunAndReturn(run func(input *user.FetchUserInput) (*user0.User, error)) *IUserUseCase_FetchUser_Call {
 	_c.Call.Return(run)
 	return _c
 }

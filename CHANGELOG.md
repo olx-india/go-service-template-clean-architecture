@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Use cases now own their input/output types and storage ports; handlers map API DTOs and concrete infrastructure is wired only in the resolver
 - README reorganized around a quick start and a documentation index
 - `make run` exports `.env` when present
 - Default `REDIS_HOST` is now `localhost:6379` (was `localhost`, which has no port and never connected)

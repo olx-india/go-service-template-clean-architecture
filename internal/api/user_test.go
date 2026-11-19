@@ -5,12 +5,13 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
-	"github.com/olx-india/go-service-template-clean-architecture/internal/domain/user"
-	"github.com/olx-india/go-service-template-clean-architecture/internal/usecase/user/mocks"
 	"net/http"
 	"net/http/httptest"
 	"strconv"
 	"testing"
+
+	"github.com/olx-india/go-service-template-clean-architecture/internal/domain/user"
+	"github.com/olx-india/go-service-template-clean-architecture/internal/usecase/user/mocks"
 
 	"github.com/olx-india/go-service-template-clean-architecture/internal/api/dto"
 	ginContext "github.com/olx-india/go-service-template-clean-architecture/internal/infrastructure/context"
@@ -54,7 +55,7 @@ func mockCreateUserUsecase(requestBody dto.CreateUserRequest) (*mocks.IUserUseCa
 		Email: requestBody.Email,
 		Age:   requestBody.Age,
 	})
-	mockUseCase.On("CreateUserRequest", mock.AnythingOfType("*dto.CreateUserRequest")).Return(expectedUser, nil)
+	mockUseCase.On("CreateUserRequest", mock.AnythingOfType("*user.CreateUserInput")).Return(expectedUser, nil)
 	return mockUseCase, handler, expectedUser
 }
 
@@ -154,7 +155,7 @@ func TestUserHandler_CreateUser_UseCaseError_ReturnsInternalServerError(t *testi
 			mockUseCase := &mocks.IUserUseCase{}
 			handler := NewUserHandler(mockUseCase)
 
-			mockUseCase.On("CreateUserRequest", mock.AnythingOfType("*dto.CreateUserRequest")).Return((*user.User)(nil), tt.useCaseError)
+			mockUseCase.On("CreateUserRequest", mock.AnythingOfType("*user.CreateUserInput")).Return((*user.User)(nil), tt.useCaseError)
 
 			requestBody := dto.CreateUserRequest{
 				ID:    123,
@@ -258,7 +259,7 @@ func TestUserHandler_CreateUser_ValidUserData_ReturnsSuccessResponse(t *testing.
 				Email: tt.expectedResponse["email"].(string),
 				Age:   int(tt.expectedResponse["age"].(float64)),
 			})
-			mockUseCase.On("CreateUserRequest", mock.AnythingOfType("*dto.CreateUserRequest")).Return(expectedUser, nil)
+			mockUseCase.On("CreateUserRequest", mock.AnythingOfType("*user.CreateUserInput")).Return(expectedUser, nil)
 
 			w, ginCtx := setupUserTestContextWithJSON(t, tt.requestBody)
 
@@ -293,7 +294,7 @@ func TestUserHandler_FetchUser_ValidRequest_ReturnsOKResponse(t *testing.T) {
 		Email: expectedResponse["email"].(string),
 		Age:   int(expectedResponse["age"].(float64)),
 	})
-	mockUseCase.On("FetchUser", mock.AnythingOfType("*dto.FetchUserRequest")).Return(expectedUser, nil)
+	mockUseCase.On("FetchUser", mock.AnythingOfType("*user.FetchUserInput")).Return(expectedUser, nil)
 
 	w, ginCtx := setupUserTestContextWithParam(t, "123")
 
@@ -376,7 +377,7 @@ func TestUserHandler_FetchUser_UseCaseError_ReturnsInternalServerError(t *testin
 			mockUseCase := &mocks.IUserUseCase{}
 			handler := NewUserHandler(mockUseCase)
 
-			mockUseCase.On("FetchUser", mock.AnythingOfType("*dto.FetchUserRequest")).Return((*user.User)(nil), tt.useCaseError)
+			mockUseCase.On("FetchUser", mock.AnythingOfType("*user.FetchUserInput")).Return((*user.User)(nil), tt.useCaseError)
 
 			w, ginCtx := setupUserTestContextWithParam(t, "123")
 
@@ -444,7 +445,7 @@ func TestUserHandler_FetchUser_ValidUserIDs_ReturnsSuccessResponse(t *testing.T)
 				Email: tt.expectedResponse["email"].(string),
 				Age:   int(tt.expectedResponse["age"].(float64)),
 			})
-			mockUseCase.On("FetchUser", mock.AnythingOfType("*dto.FetchUserRequest")).Return(expectedUser, nil)
+			mockUseCase.On("FetchUser", mock.AnythingOfType("*user.FetchUserInput")).Return(expectedUser, nil)
 
 			w, ginCtx := setupUserTestContextWithParam(t, strconv.Itoa(tt.userID))
 

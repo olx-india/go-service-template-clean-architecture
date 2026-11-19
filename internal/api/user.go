@@ -46,7 +46,13 @@ func (api *userHandler) CreateUser(ctx *ginContext.GinContext) {
 		return
 	}
 
-	response, err := api.user.CreateUserRequest(&req)
+	input := userPkg.CreateUserInput{
+		ID:    req.ID,
+		Name:  req.Name,
+		Email: req.Email,
+		Age:   req.Age,
+	}
+	response, err := api.user.CreateUserRequest(&input)
 	if !api.handleUseCaseError(logCtx, ctx, err, "Failed to create user", req.ID) {
 		return
 	}
@@ -76,7 +82,8 @@ func (api *userHandler) FetchUser(ctx *ginContext.GinContext) {
 	}
 
 	req := dto.FetchUserRequest{ID: id}
-	user, err := api.user.FetchUser(&req)
+	fetchInput := userPkg.FetchUserInput{ID: req.ID}
+	user, err := api.user.FetchUser(&fetchInput)
 	if !api.handleUseCaseError(logCtx, ctx, err, "Failed to fetch user", req.ID) {
 		return
 	}

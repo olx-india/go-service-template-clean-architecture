@@ -13,7 +13,7 @@ Go microservices benefit from a consistent structure that separates business rul
 Organize code into concentric layers with dependency inversion:
 
 1. **Domain** — pure business entities; no imports from API, HTTP, or database packages
-2. **Use case** — orchestrates domain logic; depends on repository interfaces
+2. **Use case** — orchestrates domain logic; owns its input/output types and storage ports
 3. **Infrastructure** — implements repositories, config, logging, Redis
 4. **API** — HTTP handlers and DTOs; maps transport types to use case inputs
 5. **Server** — composition root (resolver), routing, app lifecycle, telemetry
@@ -43,7 +43,7 @@ These are documented in [EXTENDING.md](../EXTENDING.md).
 ## Adding a new HTTP feature
 
 1. Define domain types in `internal/domain/<name>/`
-2. Add repository interface in `internal/infrastructure/repo/`
+2. Declare the storage port in the use case package and implement it under `internal/infrastructure/`
 3. Implement use case in `internal/usecase/<name>/`
 4. Add DTOs and handler in `internal/api/`
 5. Wire dependencies in `server/resolver/resolver.go`
