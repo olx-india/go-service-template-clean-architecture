@@ -62,7 +62,7 @@ func (r *resolver) ResolveServerContext() *ServerContext {
 
 func (r *resolver) createServerContext() *resolver {
 	// Adopter: wire your handlers and use cases here.
-	r.UserHandler = api.NewUserHandler(user.NewUserUseCase(r.redisProvider, r.userRepo, r.userWebAPIProvider))
+	r.UserHandler = api.NewUserHandler(user.NewUserUseCase(r.userRepo, r.userWebAPIProvider))
 	r.LimiterHandler = api.NewLimiterHandler(limit.NewLimitUseCase(r.redisProvider))
 	r.RedisProvider = r.redisProvider
 	return r

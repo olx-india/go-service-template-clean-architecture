@@ -1,21 +1,31 @@
 package limit
 
-import (
-	"github.com/olx-india/go-service-template-clean-architecture/internal/api/dto"
-	"github.com/olx-india/go-service-template-clean-architecture/internal/infrastructure/provider/redis"
-)
-
-type UseCase struct {
-	redisProvider *redis.Provider
+// CheckLimitInput is the use-case input for checking a user's limit.
+type CheckLimitInput struct {
+	UserID int
 }
 
-func NewLimitUseCase(redisProvider *redis.Provider) *UseCase {
-	return &UseCase{
-		redisProvider: redisProvider,
-	}
+// Result is the use-case output for a limit operation.
+type Result struct {
+	UserID         int
+	LimitAvailable int
+}
+
+// Store is the storage port owned by the limit use case.
+type Store interface {
+	LimitAvailable(userID int) (int, error)
+	ResetLimit(userID int) error
+}
+
+type UseCase struct {
+	store Store
+}
+
+func NewLimitUseCase(store Store) *UseCase {
+	return &UseCase{store: store}
 }
 
 type ILimitUseCase interface {
-	CheckLimit(_ *dto.CheckLimitRequest) (dto.CheckLimitResponse, error)
-	ResetLimit(_ *dto.CheckLimitRequest) (dto.CheckLimitResponse, error)
+	CheckLimit(input *CheckLimitInput) (Result, error)
+	ResetLimit(input *CheckLimitInput) (Result, error)
 }

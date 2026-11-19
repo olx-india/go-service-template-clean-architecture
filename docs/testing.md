@@ -22,7 +22,7 @@ Unit tests sit next to the code (`*_test.go`) and test one layer at a time, repl
 | Layer | Example | Mocks |
 |-------|---------|-------|
 | Handler | `internal/api/user_test.go` | Use case (`usecase/user/mocks`) |
-| Use case | `internal/usecase/user/user_test.go` | Repositories (`infrastructure/repo/mocks`) |
+| Use case | `internal/usecase/user/user_test.go` | Use-case ports (`usecase/user/mocks`) |
 | Domain | `internal/domain/user/user_test.go` | none |
 | Config, logger, Redis | `internal/infrastructure/config/config_test.go` and siblings | Config provider |
 
@@ -30,7 +30,7 @@ Tests use [testify](https://github.com/stretchr/testify) for assertions and mock
 
 ```go
 useCase := mocks.NewIUserUseCase(t)
-useCase.EXPECT().FetchUser(&dto.FetchUserRequest{ID: 1}).Return(&domain.User{ID: 1}, nil)
+useCase.EXPECT().FetchUser(&user.FetchUserInput{ID: 1}).Return(&domain.User{ID: 1}, nil)
 ```
 
 `NewIUserUseCase(t)` fails the test if an expected call never happens.

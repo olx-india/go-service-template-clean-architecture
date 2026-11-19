@@ -16,7 +16,6 @@ flowchart LR
 
     api --> usecase
     usecase --> domain
-    usecase --> infra
     server --> api
     server --> usecase
     server --> infra
@@ -25,14 +24,14 @@ flowchart LR
 | Layer | Package | Holds | May import |
 |-------|---------|-------|------------|
 | Domain | `internal/domain/<feature>` | Entities and rules, e.g. `user.User`, `user.NewUser` | Standard library only |
-| Use case | `internal/usecase/<feature>` | Application logic, one file per operation (`create_user.go`, `fetch_user.go`) | Domain, repository interfaces |
+| Use case | `internal/usecase/<feature>` | Application logic, one file per operation (`create_user.go`, `fetch_user.go`), input/output types and ports | Domain and standard library |
 | API | `internal/api`, `internal/api/dto` | Gin handlers, request/response types, OpenAPI annotations | Use case interfaces, DTOs |
 | Infrastructure | `internal/infrastructure/...` | Config, logging, Redis provider, repository implementations | Domain, third-party clients |
 | Server | `server/...` | Composition root, routes, middleware, HTTP lifecycle, tracing | Everything |
 
-**The dependency rule:** imports point inward. The domain knows nothing about HTTP or Redis; a use case depends on a repository *interface* (`internal/infrastructure/repo/repo.go`), never on a concrete database client.
+**The dependency rule:** imports point inward. The domain knows nothing about HTTP or Redis; a use case declares the storage ports it needs, and the resolver supplies infrastructure implementations.
 
-> **Known gap.** The sample use cases take and return `internal/api/dto` types (for example `IUserUseCase.CreateUserRequest(*dto.CreateUserRequest)`). That makes the use case layer depend on the API layer. When you build real features, give each use case its own input and output types and map DTOs to them in the handler. The domain's `CreateUserInput` shows the pattern.
+The sample use cases own their input, output, and port types. Handlers map API DTOs to use-case inputs and map use-case results back to DTOs, so `internal/usecase` does not import `internal/api` or concrete infrastructure packages.
 
 ## Request lifecycle
 
@@ -48,7 +47,7 @@ sequenceDiagram
     G->>G: Recovery → logging (request/trace IDs) → OpenTelemetry span → CORS
     G->>H: WrapContext(handler)
     H->>H: Bind and validate JSON into dto.CreateUserRequest
-    H->>U: CreateUserRequest(req)
+    H->>U: map DTO → CreateUserInput
     U->>R: Save / Fetch (through an interface)
     R-->>U: domain.User
     U-->>H: result or error
@@ -70,7 +69,7 @@ All objects are built in one place, `server/resolver/resolver.go`. There is no D
 
 ```go
 r.UserHandler = api.NewUserHandler(
-    user.NewUserUseCase(r.redisProvider, r.userRepo, r.userWebAPIProvider),
+    user.NewUserUseCase(r.userRepo, r.userWebAPIProvider),
 )
 ```
 

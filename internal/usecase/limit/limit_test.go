@@ -3,148 +3,59 @@ package limit
 import (
 	"testing"
 
-	"github.com/olx-india/go-service-template-clean-architecture/internal/api/dto"
-
 	"github.com/stretchr/testify/assert"
 )
 
+type fakeStore struct{}
 
-func TestNewLimitUseCase_ValidInput_ReturnsLimitUseCase(t *testing.T) {
-	useCase := NewLimitUseCase(nil)
+func (fakeStore) LimitAvailable(int) (int, error) { return 0, nil }
 
-	assert.NotNil(t, useCase)
-	assert.IsType(t, &UseCase{}, useCase)
-	assert.Nil(t, useCase.redisProvider)
-}
+func (fakeStore) ResetLimit(int) error { return nil }
 
-func TestNewLimitUseCase_NilInput_ReturnsLimitUseCase(t *testing.T) {
-	useCase := NewLimitUseCase(nil)
+func TestNewLimitUseCase_ReturnsConfiguredUseCase(t *testing.T) {
+	store := fakeStore{}
+	useCase := NewLimitUseCase(store)
 
 	assert.NotNil(t, useCase)
-	assert.IsType(t, &UseCase{}, useCase)
-	assert.Nil(t, useCase.redisProvider)
+	assert.Equal(t, store, useCase.store)
 }
 
-func TestUseCase_CheckLimit_ValidRequest_ReturnsResponse(t *testing.T) {
+func TestUseCase_CheckLimit_ReturnsUserResult(t *testing.T) {
 	useCase := NewLimitUseCase(nil)
 
-	request := &dto.CheckLimitRequest{
-		UserID: 123,
-	}
-
-	response, err := useCase.CheckLimit(request)
+	result, err := useCase.CheckLimit(&CheckLimitInput{UserID: 123})
 
 	assert.NoError(t, err)
-	assert.NotNil(t, response)
-	assert.IsType(t, dto.CheckLimitResponse{}, response)
+	assert.Equal(t, Result{UserID: 123, LimitAvailable: 0}, result)
 }
 
-func TestUseCase_CheckLimit_NilRequest_ReturnsResponse(t *testing.T) {
+func TestUseCase_CheckLimit_NilInput_ReturnsEmptyResult(t *testing.T) {
 	useCase := NewLimitUseCase(nil)
 
-	response, err := useCase.CheckLimit(nil)
+	result, err := useCase.CheckLimit(nil)
 
 	assert.NoError(t, err)
-	assert.NotNil(t, response)
-	assert.IsType(t, dto.CheckLimitResponse{}, response)
+	assert.Equal(t, Result{}, result)
 }
 
-func TestUseCase_CheckLimit_EmptyRequest_ReturnsResponse(t *testing.T) {
+func TestUseCase_ResetLimit_ReturnsUserResult(t *testing.T) {
 	useCase := NewLimitUseCase(nil)
 
-	request := &dto.CheckLimitRequest{}
-	response, err := useCase.CheckLimit(request)
+	result, err := useCase.ResetLimit(&CheckLimitInput{UserID: 123})
 
 	assert.NoError(t, err)
-	assert.NotNil(t, response)
-	assert.IsType(t, dto.CheckLimitResponse{}, response)
+	assert.Equal(t, Result{UserID: 123, LimitAvailable: 0}, result)
 }
 
-func TestUseCase_CheckLimit_EdgeCaseUserIDs_ReturnsResponse(t *testing.T) {
-	tests := []struct {
-		name    string
-		request *dto.CheckLimitRequest
-	}{
-		{
-			name: "MinValidUserID",
-			request: &dto.CheckLimitRequest{
-				UserID: 1,
-			},
-		},
-		{
-			name: "PositiveUserID",
-			request: &dto.CheckLimitRequest{
-				UserID: 123,
-			},
-		},
-		{
-			name: "MaxIntUserID",
-			request: &dto.CheckLimitRequest{
-				UserID: 2147483647,
-			},
-		},
-		{
-			name: "ZeroUserID",
-			request: &dto.CheckLimitRequest{
-				UserID: 0,
-			},
-		},
-		{
-			name: "NegativeUserID",
-			request: &dto.CheckLimitRequest{
-				UserID: -1,
-			},
-		},
-		{
-			name: "MinIntUserID",
-			request: &dto.CheckLimitRequest{
-				UserID: -2147483648,
-			},
-		},
-	}
-
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			useCase := NewLimitUseCase(nil)
-
-			response, err := useCase.CheckLimit(tt.request)
-
-			assert.NoError(t, err)
-			assert.NotNil(t, response)
-			assert.IsType(t, dto.CheckLimitResponse{}, response)
-		})
-	}
-}
-
-func TestUseCase_CheckLimit_ResponseStructure_ReturnsCorrectType(t *testing.T) {
+func TestUseCase_ResetLimit_NilInput_ReturnsEmptyResult(t *testing.T) {
 	useCase := NewLimitUseCase(nil)
-	request := &dto.CheckLimitRequest{
-		UserID: 123,
-	}
 
-	response, err := useCase.CheckLimit(request)
+	result, err := useCase.ResetLimit(nil)
 
 	assert.NoError(t, err)
-	assert.NotNil(t, response)
-	assert.IsType(t, 0, response.UserID)
-	assert.IsType(t, 0, response.LimitAvailable)
+	assert.Equal(t, Result{}, result)
 }
 
-func TestUseCase_CheckLimit_InterfaceCompliance(t *testing.T) {
-	useCase := NewLimitUseCase(nil)
-	var _ ILimitUseCase = useCase
-	request := &dto.CheckLimitRequest{UserID: 123}
-	
-	_, err := useCase.CheckLimit(request)
-
-	assert.NoError(t, err)
-}
-
-func TestUseCase_CheckLimit_ErrorHandling(t *testing.T) {
-	useCase := NewLimitUseCase(nil)
-	request := &dto.CheckLimitRequest{UserID: 123}
-
-	_, err := useCase.CheckLimit(request)
-	
-	assert.NoError(t, err)
+func TestUseCase_InterfaceCompliance(t *testing.T) {
+	var _ ILimitUseCase = NewLimitUseCase(nil)
 }

@@ -1,11 +1,13 @@
 package user
 
 import (
-	"github.com/olx-india/go-service-template-clean-architecture/internal/api/dto"
 	domain "github.com/olx-india/go-service-template-clean-architecture/internal/domain/user"
 )
 
-func (s *UseCase) FetchUser(_ *dto.FetchUserRequest) (*domain.User, error) {
-	// Adopter: implement fetch logic and wire repositories.
-	return &domain.User{}, nil
+func (s *UseCase) FetchUser(input *FetchUserInput) (*domain.User, error) {
+	// Adopter: implement fetch logic and use s.userStore / s.userProvider.
+	if input == nil {
+		return &domain.User{}, nil
+	}
+	return &domain.User{ID: input.ID}, nil
 }

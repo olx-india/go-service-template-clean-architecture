@@ -37,7 +37,11 @@ func NewLimiterHandler(limiter limitPkg.ILimitUseCase) ILimiterHandler {
 // @Router /api/v1/limit/check [post]
 func (api *limiterHandler) CheckLimit(ctx *context.GinContext) {
 	api.handleLimit(ctx, "Checking limit", func(req *dto.CheckLimitRequest) (dto.CheckLimitResponse, error) {
-		return api.limit.CheckLimit(req)
+		result, err := api.limit.CheckLimit(&limitPkg.CheckLimitInput{UserID: req.UserID})
+		return dto.CheckLimitResponse{
+			UserID:         result.UserID,
+			LimitAvailable: result.LimitAvailable,
+		}, err
 	}, "Limit checked successfully", "Failed to fetch limit")
 }
 
@@ -54,7 +58,11 @@ func (api *limiterHandler) CheckLimit(ctx *context.GinContext) {
 // @Router /api/v1/limit/reset [post]
 func (api *limiterHandler) ResetLimit(ctx *context.GinContext) {
 	api.handleLimit(ctx, "Resetting limit", func(req *dto.CheckLimitRequest) (dto.CheckLimitResponse, error) {
-		return api.limit.ResetLimit(req)
+		result, err := api.limit.ResetLimit(&limitPkg.CheckLimitInput{UserID: req.UserID})
+		return dto.CheckLimitResponse{
+			UserID:         result.UserID,
+			LimitAvailable: result.LimitAvailable,
+		}, err
 	}, "Limit reset successfully", "Failed to reset limit")
 }
 
