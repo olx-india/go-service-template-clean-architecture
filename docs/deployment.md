@@ -67,7 +67,7 @@ The template favours a quick local start. Review these before you ship:
 
 - [ ] **Run as non-root.** The runtime image runs as root. Add a user and `USER` it, or switch to a distroless base image.
 - [ ] **Pin the runtime image.** Replace `alpine:latest` with a specific version or digest.
-- [ ] **Restrict CORS.** `server/router/router.go` allows every origin together with `Allow-Credentials: true`. Limit it to your front-end origins.
+- [ ] **Restrict CORS.** Set `CORS_ALLOWED_ORIGINS` to your front-end origins. The default `*` allows any origin without credentials; an explicit list enables credentialed requests only for matching origins.
 - [ ] **Hide internal errors.** Error responses include raw Go error text ([API → Errors](api.md#errors)). Return stable, client-safe messages and log the details.
 - [ ] **Decide what happens without Redis.** By default the service starts without it and `/ready` passes ([Configuration → Redis](configuration.md#redis)).
 - [ ] **Tune tracing.** Change the sampler from `AlwaysSample` and use TLS to the collector ([Observability](observability.md#before-production)).

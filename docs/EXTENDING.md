@@ -45,6 +45,6 @@ Service-level metadata lives on `cmd/main.go`. Commit the regenerated `oas.json`
 
 ## Security hardening
 
-- Restrict CORS origins (currently `*` for local dev)
+- Set `CORS_ALLOWED_ORIGINS` to restrict browser origins (defaults to `*` for local dev)
 - Add request size limits and security headers middleware
 - Run `govulncheck` locally (`make vuln`) and enable GitHub Code scanning (default setup) in repository settings

@@ -14,15 +14,81 @@ import (
 )
 
 func TestCORSHeaders_Options_NoContent(t *testing.T) {
-	mw := corsMiddleware()
+	tests := []struct {
+		name            string
+		method          string
+		origin          string
+		allowedOrigins  []string
+		wantStatus      int
+		wantOrigin      string
+		wantCredentials string
+		wantMethods     bool
+	}{
+		{
+			name:           "wildcard allows any origin",
+			method:         http.MethodGet,
+			origin:         "https://app.example.com",
+			allowedOrigins: []string{"*"},
+			wantStatus:     http.StatusOK,
+			wantOrigin:     "*",
+		},
+		{
+			name:            "allowed origin echoes origin and credentials",
+			method:          http.MethodGet,
+			origin:          "https://app.example.com",
+			allowedOrigins:  []string{"https://app.example.com"},
+			wantStatus:      http.StatusOK,
+			wantOrigin:      "https://app.example.com",
+			wantCredentials: "true",
+		},
+		{
+			name:           "disallowed origin omits CORS headers",
+			method:         http.MethodGet,
+			origin:         "https://evil.example.com",
+			allowedOrigins: []string{"https://app.example.com"},
+			wantStatus:     http.StatusOK,
+		},
+		{
+			name:            "allowed origin preflight",
+			method:          http.MethodOptions,
+			origin:          "https://app.example.com",
+			allowedOrigins:  []string{"https://app.example.com"},
+			wantStatus:      http.StatusNoContent,
+			wantOrigin:      "https://app.example.com",
+			wantCredentials: "true",
+			wantMethods:     true,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			rr := runCORSMiddleware(t, tt.method, tt.origin, tt.allowedOrigins)
+
+			assert.Equal(t, tt.wantStatus, rr.Code)
+			assert.Equal(t, tt.wantOrigin, rr.Header().Get("Access-Control-Allow-Origin"))
+			assert.Equal(t, tt.wantCredentials, rr.Header().Get("Access-Control-Allow-Credentials"))
+			assert.Equal(t, "Origin", rr.Header().Get("Vary"))
+			if tt.wantMethods {
+				assert.NotEmpty(t, rr.Header().Get("Access-Control-Allow-Methods"))
+			}
+		})
+	}
+}
+
+func runCORSMiddleware(t *testing.T, method, origin string, allowedOrigins []string) *httptest.ResponseRecorder {
+	t.Helper()
+
 	rr := httptest.NewRecorder()
-	req := httptest.NewRequest(http.MethodOptions, "/any", nil)
+	req := httptest.NewRequest(method, "/any", nil)
+	if origin != "" {
+		req.Header.Set("Origin", origin)
+	}
 	c, _ := gin.CreateTestContext(rr)
 	c.Request = req
-	mw(c)
 
-	assert.Equal(t, http.StatusNoContent, rr.Code)
-	assert.NotEmpty(t, rr.Header().Get("Access-Control-Allow-Origin"))
+	corsMiddleware(allowedOrigins)(c)
+
+	return rr
 }
 
 func TestWrapContext_CallsHandler(t *testing.T) {

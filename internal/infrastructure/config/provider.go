@@ -12,6 +12,7 @@ type Provider interface {
 	GetAppName() string
 	GetOTLPEndpoint() string
 	GetOTELEnabled() bool
+	GetCORSAllowedOrigins() []string
 }
 
 var _ Provider = (*Config)(nil)
@@ -50,4 +51,8 @@ func (c *Config) GetOTLPEndpoint() string {
 
 func (c *Config) GetOTELEnabled() bool {
 	return c.Server.OTELEnabled
+}
+
+func (c *Config) GetCORSAllowedOrigins() []string {
+	return c.Server.CORSAllowedOrigins
 }

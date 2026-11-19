@@ -60,7 +60,7 @@ Middleware is registered in `server/router/router.go`, in this order:
 1. `gin.Recovery()` — turns panics into a 500 instead of crashing the process
 2. `logger.LoggingMiddleware()` — assigns `X-Request-ID` / `X-Trace-ID` and logs start and end of each request ([Observability](observability.md))
 3. `otelgin.Middleware` — starts a trace span per request; a no-op unless tracing is on
-4. CORS — allows any origin; tighten this before production ([Deployment](deployment.md#production-checklist))
+4. CORS — allows any origin by default; set `CORS_ALLOWED_ORIGINS` to an explicit comma-separated list before production ([Configuration](configuration.md#variables), [Deployment](deployment.md#production-checklist))
 
 `WrapContext` adapts Gin handlers to `*context.GinContext` (`internal/infrastructure/context`), a thin wrapper that keeps handlers testable and gives you one place to add request-scoped helpers.
 

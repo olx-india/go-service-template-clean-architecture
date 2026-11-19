@@ -16,6 +16,7 @@ All configuration comes from environment variables, read once at startup by `int
 | `REDIS_HOST` | `localhost:6379` | Redis address as `host:port` |
 | `OTEL_ENABLED` | `false` | `true` or `1` turns on OpenTelemetry tracing |
 | `OTLP_ENDPOINT` | `localhost:4317` | OTLP gRPC collector address, e.g. Jaeger |
+| `CORS_ALLOWED_ORIGINS` | `*` | Comma-separated browser origins allowed to call the API. `*` allows any origin without credentials; an explicit list enables credentialed requests only for matching origins |
 
 Invalid values fall back to the default without an error: a `READ_TIMEOUT` of `abc` becomes `60s`. Validate stricter requirements at startup in your fork (see [Extending](EXTENDING.md#configuration-validation)).
 

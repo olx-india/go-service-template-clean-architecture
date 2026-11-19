@@ -37,7 +37,7 @@ func NewRouter(cfg config.Provider) *Router {
 	router.Use(gin.Recovery())
 	router.Use(logger.LoggingMiddleware())
 	router.Use(otelgin.Middleware(cfg.GetAppName()))
-	router.Use(corsMiddleware())
+	router.Use(corsMiddleware(cfg.GetCORSAllowedOrigins()))
 	return router
 }
 
@@ -71,16 +71,43 @@ func WrapContext(handler func(ctx *gincontext.GinContext)) gin.HandlerFunc {
 	}
 }
 
-func corsMiddleware() gin.HandlerFunc {
+func corsMiddleware(allowedOrigins []string) gin.HandlerFunc {
+	allowAll := contains(allowedOrigins, "*")
+	allowed := make(map[string]struct{}, len(allowedOrigins))
+	for _, origin := range allowedOrigins {
+		if origin != "*" {
+			allowed[origin] = struct{}{}
+		}
+	}
+
 	return func(c *gin.Context) {
-		c.Writer.Header().Set("Access-Control-Allow-Origin", "*")
-		c.Writer.Header().Set("Access-Control-Allow-Credentials", "true")
 		c.Writer.Header().Set("Access-Control-Allow-Headers", "Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With")
 		c.Writer.Header().Set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")
+
+		origin := c.GetHeader("Origin")
+		if allowAll {
+			c.Writer.Header().Set("Access-Control-Allow-Origin", "*")
+		} else if origin != "" {
+			if _, ok := allowed[origin]; ok {
+				c.Writer.Header().Set("Access-Control-Allow-Origin", origin)
+				c.Writer.Header().Set("Access-Control-Allow-Credentials", "true")
+			}
+		}
+		c.Writer.Header().Add("Vary", "Origin")
+
 		if c.Request.Method == "OPTIONS" {
 			c.AbortWithStatus(http.StatusNoContent)
 			return
 		}
 		c.Next()
 	}
+}
+
+func contains(values []string, target string) bool {
+	for _, value := range values {
+		if value == target {
+			return true
+		}
+	}
+	return false
 }

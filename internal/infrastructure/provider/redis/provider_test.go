@@ -18,6 +18,7 @@ func (f fakeCfg) GetEnv() string                       { return "" }
 func (f fakeCfg) GetAppName() string                   { return "" }
 func (f fakeCfg) GetOTLPEndpoint() string              { return "" }
 func (f fakeCfg) GetOTELEnabled() bool                 { return false }
+func (f fakeCfg) GetCORSAllowedOrigins() []string      { return nil }
 
 func TestNewProvider_InvalidHost_ReturnsError(t *testing.T) {
 	cfg := fakeCfg{host: "127.0.0.1:0"}

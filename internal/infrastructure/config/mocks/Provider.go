@@ -81,6 +81,52 @@ func (_c *Provider_GetAppName_Call) RunAndReturn(run func() string) *Provider_Ge
 	return _c
 }
 
+// GetCORSAllowedOrigins provides a mock function for the type Provider
+func (_mock *Provider) GetCORSAllowedOrigins() []string {
+	ret := _mock.Called()
+
+	if len(ret) == 0 {
+		panic("no return value specified for GetCORSAllowedOrigins")
+	}
+
+	var r0 []string
+	if returnFunc, ok := ret.Get(0).(func() []string); ok {
+		r0 = returnFunc()
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).([]string)
+		}
+	}
+	return r0
+}
+
+// Provider_GetCORSAllowedOrigins_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'GetCORSAllowedOrigins'
+type Provider_GetCORSAllowedOrigins_Call struct {
+	*mock.Call
+}
+
+// GetCORSAllowedOrigins is a helper method to define mock.On call
+func (_e *Provider_Expecter) GetCORSAllowedOrigins() *Provider_GetCORSAllowedOrigins_Call {
+	return &Provider_GetCORSAllowedOrigins_Call{Call: _e.mock.On("GetCORSAllowedOrigins")}
+}
+
+func (_c *Provider_GetCORSAllowedOrigins_Call) Run(run func()) *Provider_GetCORSAllowedOrigins_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		run()
+	})
+	return _c
+}
+
+func (_c *Provider_GetCORSAllowedOrigins_Call) Return(strings []string) *Provider_GetCORSAllowedOrigins_Call {
+	_c.Call.Return(strings)
+	return _c
+}
+
+func (_c *Provider_GetCORSAllowedOrigins_Call) RunAndReturn(run func() []string) *Provider_GetCORSAllowedOrigins_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
 // GetEnv provides a mock function for the type Provider
 func (_mock *Provider) GetEnv() string {
 	ret := _mock.Called()

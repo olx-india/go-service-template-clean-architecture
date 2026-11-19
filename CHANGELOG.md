@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Configurable CORS allowed origins via `CORS_ALLOWED_ORIGINS`; credentialed requests are enabled only for explicit origins
 - Guides in `docs/`: getting started, architecture, configuration, API, observability, testing, deployment, adding a feature
 - Social preview image in `docs/assets/`
 - Documentation site on GitHub Pages (MkDocs Material), with a hosted Swagger UI, deployed by `.github/workflows/docs.yml`
