@@ -105,7 +105,7 @@ Validation uses Gin's `binding` tags on the DTOs in `internal/api/dto/`, backed 
 |--------|-----------|-----------|
 | `X-Request-ID` | request and response | Echoed back if sent; otherwise a UUID is generated. Included in every log line for the request. |
 | `X-Trace-ID` | request and response | Same as above, for correlating calls across services |
-| `Access-Control-Allow-*` | response | CORS allows any origin. `OPTIONS` preflight requests get 204. |
+| `Access-Control-Allow-*` | response | CORS allows the configured `CORS_ALLOWED_ORIGINS`; wildcard mode sends no credentials. `OPTIONS` preflight requests get 204. |
 
 ## OpenAPI and Swagger UI
 

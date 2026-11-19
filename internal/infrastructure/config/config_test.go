@@ -152,3 +152,21 @@ func TestProvider_GetAppName_Value(t *testing.T) {
 	c := NewConfig()
 	assert.Equal(t, "a", c.GetAppName())
 }
+
+func TestProvider_GetCORSAllowedOrigins_Default(t *testing.T) {
+	os.Unsetenv(EnvCORSAllowedOrigins)
+	c := NewConfig()
+	assert.Equal(t, []string{"*"}, c.GetCORSAllowedOrigins())
+}
+
+func TestProvider_GetCORSAllowedOrigins_List(t *testing.T) {
+	t.Setenv(EnvCORSAllowedOrigins, " https://app.example.com, https://admin.example.com ,")
+	c := NewConfig()
+	assert.Equal(t, []string{"https://app.example.com", "https://admin.example.com"}, c.GetCORSAllowedOrigins())
+}
+
+func TestProvider_GetCORSAllowedOrigins_EmptyListFallsBack(t *testing.T) {
+	t.Setenv(EnvCORSAllowedOrigins, " , ,")
+	c := NewConfig()
+	assert.Equal(t, []string{"*"}, c.GetCORSAllowedOrigins())
+}
