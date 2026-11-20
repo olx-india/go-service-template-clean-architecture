@@ -12,9 +12,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Guides in `docs/`: getting started, architecture, configuration, API, observability, testing, deployment, adding a feature
 - Social preview image in `docs/assets/`
 - Documentation site on GitHub Pages (MkDocs Material), with a hosted Swagger UI, deployed by `.github/workflows/docs.yml`
+- `depguard` rules that enforce Clean Architecture dependency boundaries during linting and CI
 
 ### Changed
 
+- Use cases now own their input/output types and storage ports; handlers map API DTOs and concrete infrastructure is wired only in the resolver
 - README reorganized around a quick start and a documentation index
 - `make run` exports `.env` when present
 - Default `REDIS_HOST` is now `localhost:6379` (was `localhost`, which has no port and never connected)

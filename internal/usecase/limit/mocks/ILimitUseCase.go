@@ -5,8 +5,7 @@
 package mocks
 
 import (
-	"github.com/olx-india/go-service-template-clean-architecture/internal/api/dto"
-
+	"github.com/olx-india/go-service-template-clean-architecture/internal/usecase/limit"
 	mock "github.com/stretchr/testify/mock"
 )
 
@@ -16,10 +15,19 @@ func NewILimitUseCase(t interface {
 	mock.TestingT
 	Cleanup(func())
 }) *ILimitUseCase {
+	if helper, ok := t.(interface{ Helper() }); ok {
+		helper.Helper()
+	}
+
 	mock := &ILimitUseCase{}
 	mock.Mock.Test(t)
 
-	t.Cleanup(func() { mock.AssertExpectations(t) })
+	t.Cleanup(func() {
+		if helper, ok := t.(interface{ Helper() }); ok {
+			helper.Helper()
+		}
+		mock.AssertExpectations(t)
+	})
 
 	return mock
 }
@@ -38,25 +46,25 @@ func (_m *ILimitUseCase) EXPECT() *ILimitUseCase_Expecter {
 }
 
 // CheckLimit provides a mock function for the type ILimitUseCase
-func (_mock *ILimitUseCase) CheckLimit(checkLimitRequest *dto.CheckLimitRequest) (dto.CheckLimitResponse, error) {
-	ret := _mock.Called(checkLimitRequest)
+func (_mock *ILimitUseCase) CheckLimit(input *limit.CheckLimitInput) (limit.Result, error) {
+	ret := _mock.Called(input)
 
 	if len(ret) == 0 {
 		panic("no return value specified for CheckLimit")
 	}
 
-	var r0 dto.CheckLimitResponse
+	var r0 limit.Result
 	var r1 error
-	if returnFunc, ok := ret.Get(0).(func(*dto.CheckLimitRequest) (dto.CheckLimitResponse, error)); ok {
-		return returnFunc(checkLimitRequest)
+	if returnFunc, ok := ret.Get(0).(func(*limit.CheckLimitInput) (limit.Result, error)); ok {
+		return returnFunc(input)
 	}
-	if returnFunc, ok := ret.Get(0).(func(*dto.CheckLimitRequest) dto.CheckLimitResponse); ok {
-		r0 = returnFunc(checkLimitRequest)
+	if returnFunc, ok := ret.Get(0).(func(*limit.CheckLimitInput) limit.Result); ok {
+		r0 = returnFunc(input)
 	} else {
-		r0 = ret.Get(0).(dto.CheckLimitResponse)
+		r0 = ret.Get(0).(limit.Result)
 	}
-	if returnFunc, ok := ret.Get(1).(func(*dto.CheckLimitRequest) error); ok {
-		r1 = returnFunc(checkLimitRequest)
+	if returnFunc, ok := ret.Get(1).(func(*limit.CheckLimitInput) error); ok {
+		r1 = returnFunc(input)
 	} else {
 		r1 = ret.Error(1)
 	}
@@ -69,16 +77,16 @@ type ILimitUseCase_CheckLimit_Call struct {
 }
 
 // CheckLimit is a helper method to define mock.On call
-//   - checkLimitRequest *dto.CheckLimitRequest
-func (_e *ILimitUseCase_Expecter) CheckLimit(checkLimitRequest interface{}) *ILimitUseCase_CheckLimit_Call {
-	return &ILimitUseCase_CheckLimit_Call{Call: _e.mock.On("CheckLimit", checkLimitRequest)}
+//   - input *limit.CheckLimitInput
+func (_e *ILimitUseCase_Expecter) CheckLimit(input any) *ILimitUseCase_CheckLimit_Call {
+	return &ILimitUseCase_CheckLimit_Call{Call: _e.mock.On("CheckLimit", input)}
 }
 
-func (_c *ILimitUseCase_CheckLimit_Call) Run(run func(checkLimitRequest *dto.CheckLimitRequest)) *ILimitUseCase_CheckLimit_Call {
+func (_c *ILimitUseCase_CheckLimit_Call) Run(run func(input *limit.CheckLimitInput)) *ILimitUseCase_CheckLimit_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		var arg0 *dto.CheckLimitRequest
+		var arg0 *limit.CheckLimitInput
 		if args[0] != nil {
-			arg0 = args[0].(*dto.CheckLimitRequest)
+			arg0 = args[0].(*limit.CheckLimitInput)
 		}
 		run(
 			arg0,
@@ -87,36 +95,36 @@ func (_c *ILimitUseCase_CheckLimit_Call) Run(run func(checkLimitRequest *dto.Che
 	return _c
 }
 
-func (_c *ILimitUseCase_CheckLimit_Call) Return(checkLimitResponse dto.CheckLimitResponse, err error) *ILimitUseCase_CheckLimit_Call {
-	_c.Call.Return(checkLimitResponse, err)
+func (_c *ILimitUseCase_CheckLimit_Call) Return(result limit.Result, err error) *ILimitUseCase_CheckLimit_Call {
+	_c.Call.Return(result, err)
 	return _c
 }
 
-func (_c *ILimitUseCase_CheckLimit_Call) RunAndReturn(run func(checkLimitRequest *dto.CheckLimitRequest) (dto.CheckLimitResponse, error)) *ILimitUseCase_CheckLimit_Call {
+func (_c *ILimitUseCase_CheckLimit_Call) RunAndReturn(run func(input *limit.CheckLimitInput) (limit.Result, error)) *ILimitUseCase_CheckLimit_Call {
 	_c.Call.Return(run)
 	return _c
 }
 
 // ResetLimit provides a mock function for the type ILimitUseCase
-func (_mock *ILimitUseCase) ResetLimit(checkLimitRequest *dto.CheckLimitRequest) (dto.CheckLimitResponse, error) {
-	ret := _mock.Called(checkLimitRequest)
+func (_mock *ILimitUseCase) ResetLimit(input *limit.CheckLimitInput) (limit.Result, error) {
+	ret := _mock.Called(input)
 
 	if len(ret) == 0 {
 		panic("no return value specified for ResetLimit")
 	}
 
-	var r0 dto.CheckLimitResponse
+	var r0 limit.Result
 	var r1 error
-	if returnFunc, ok := ret.Get(0).(func(*dto.CheckLimitRequest) (dto.CheckLimitResponse, error)); ok {
-		return returnFunc(checkLimitRequest)
+	if returnFunc, ok := ret.Get(0).(func(*limit.CheckLimitInput) (limit.Result, error)); ok {
+		return returnFunc(input)
 	}
-	if returnFunc, ok := ret.Get(0).(func(*dto.CheckLimitRequest) dto.CheckLimitResponse); ok {
-		r0 = returnFunc(checkLimitRequest)
+	if returnFunc, ok := ret.Get(0).(func(*limit.CheckLimitInput) limit.Result); ok {
+		r0 = returnFunc(input)
 	} else {
-		r0 = ret.Get(0).(dto.CheckLimitResponse)
+		r0 = ret.Get(0).(limit.Result)
 	}
-	if returnFunc, ok := ret.Get(1).(func(*dto.CheckLimitRequest) error); ok {
-		r1 = returnFunc(checkLimitRequest)
+	if returnFunc, ok := ret.Get(1).(func(*limit.CheckLimitInput) error); ok {
+		r1 = returnFunc(input)
 	} else {
 		r1 = ret.Error(1)
 	}
@@ -129,16 +137,16 @@ type ILimitUseCase_ResetLimit_Call struct {
 }
 
 // ResetLimit is a helper method to define mock.On call
-//   - checkLimitRequest *dto.CheckLimitRequest
-func (_e *ILimitUseCase_Expecter) ResetLimit(checkLimitRequest interface{}) *ILimitUseCase_ResetLimit_Call {
-	return &ILimitUseCase_ResetLimit_Call{Call: _e.mock.On("ResetLimit", checkLimitRequest)}
+//   - input *limit.CheckLimitInput
+func (_e *ILimitUseCase_Expecter) ResetLimit(input any) *ILimitUseCase_ResetLimit_Call {
+	return &ILimitUseCase_ResetLimit_Call{Call: _e.mock.On("ResetLimit", input)}
 }
 
-func (_c *ILimitUseCase_ResetLimit_Call) Run(run func(checkLimitRequest *dto.CheckLimitRequest)) *ILimitUseCase_ResetLimit_Call {
+func (_c *ILimitUseCase_ResetLimit_Call) Run(run func(input *limit.CheckLimitInput)) *ILimitUseCase_ResetLimit_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		var arg0 *dto.CheckLimitRequest
+		var arg0 *limit.CheckLimitInput
 		if args[0] != nil {
-			arg0 = args[0].(*dto.CheckLimitRequest)
+			arg0 = args[0].(*limit.CheckLimitInput)
 		}
 		run(
 			arg0,
@@ -147,12 +155,12 @@ func (_c *ILimitUseCase_ResetLimit_Call) Run(run func(checkLimitRequest *dto.Che
 	return _c
 }
 
-func (_c *ILimitUseCase_ResetLimit_Call) Return(checkLimitResponse dto.CheckLimitResponse, err error) *ILimitUseCase_ResetLimit_Call {
-	_c.Call.Return(checkLimitResponse, err)
+func (_c *ILimitUseCase_ResetLimit_Call) Return(result limit.Result, err error) *ILimitUseCase_ResetLimit_Call {
+	_c.Call.Return(result, err)
 	return _c
 }
 
-func (_c *ILimitUseCase_ResetLimit_Call) RunAndReturn(run func(checkLimitRequest *dto.CheckLimitRequest) (dto.CheckLimitResponse, error)) *ILimitUseCase_ResetLimit_Call {
+func (_c *ILimitUseCase_ResetLimit_Call) RunAndReturn(run func(input *limit.CheckLimitInput) (limit.Result, error)) *ILimitUseCase_ResetLimit_Call {
 	_c.Call.Return(run)
 	return _c
 }
