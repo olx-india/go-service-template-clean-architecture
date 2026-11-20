@@ -33,6 +33,12 @@ flowchart LR
 
 The sample use cases own their input, output, and port types. Handlers map API DTOs to use-case inputs and map use-case results back to DTOs, so `internal/usecase` does not import `internal/api` or concrete infrastructure packages.
 
+## Enforcing the dependency rule
+
+The `depguard` linter runs as part of `make lint` (and therefore `make pre-commit` and CI). Its rules reject outer-layer imports from domain code, API, infrastructure, HTTP, and Redis clients in use cases, and repository or server imports in API handlers. Tests are excluded so they can use test-only dependencies.
+
+The rules live under `linters.settings.depguard` in `.golangci.yml`. When adding a layer or package family, add its module import prefix to the relevant `files` glob and add a `deny` entry for every outer layer it must not import. Keep the module path in the rule current if you rename the module. To verify a rule without committing a violation, add a temporary forbidden import and run `make lint`; it should report the depguard rule, then remove the import.
+
 ## Request lifecycle
 
 ```mermaid

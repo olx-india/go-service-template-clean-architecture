@@ -7,6 +7,7 @@ linters:
     - bodyclose
     - copyloopvar
     - cyclop
+    - depguard
     - dogsled
     - dupl
     - durationcheck
@@ -49,6 +50,52 @@ linters:
     - unused
     - whitespace
   settings:
+    depguard:
+      rules:
+        domain-inward-dependencies:
+          files:
+            - "**/internal/domain/**/*.go"
+            - "!$test"
+          list-mode: lax
+          deny:
+            - pkg: github.com/olx-india/go-service-template-clean-architecture/internal/usecase
+              desc: Domain code must not import the use case layer; move orchestration inward or invert the dependency with a domain interface.
+            - pkg: github.com/olx-india/go-service-template-clean-architecture/internal/api
+              desc: Domain code must not import the API layer.
+            - pkg: github.com/olx-india/go-service-template-clean-architecture/internal/infrastructure
+              desc: Domain code must not import infrastructure; declare the abstraction in the domain layer.
+            - pkg: github.com/olx-india/go-service-template-clean-architecture/server
+              desc: Domain code must not import the server composition root.
+            - pkg: github.com/gin-gonic/gin
+              desc: Domain code must not depend on an HTTP framework.
+            - pkg: github.com/redis
+              desc: Domain code must not depend on a database or cache client.
+        usecase-inward-dependencies:
+          files:
+            - "**/internal/usecase/**/*.go"
+            - "!$test"
+          list-mode: lax
+          deny:
+            - pkg: github.com/olx-india/go-service-template-clean-architecture/internal/api
+              desc: Use cases must not import the API layer; define their own input and output types and map them in handlers.
+            - pkg: github.com/olx-india/go-service-template-clean-architecture/internal/infrastructure
+              desc: Use cases must depend on ports they own, not concrete infrastructure; wire implementations in the resolver.
+            - pkg: github.com/olx-india/go-service-template-clean-architecture/server
+              desc: Use cases must not import the server composition root.
+            - pkg: github.com/gin-gonic/gin
+              desc: Use cases must not depend on an HTTP framework.
+            - pkg: github.com/redis
+              desc: Use cases must not depend on a concrete database or cache client.
+        api-dependency-boundaries:
+          files:
+            - "**/internal/api/**/*.go"
+            - "!$test"
+          list-mode: lax
+          deny:
+            - pkg: github.com/olx-india/go-service-template-clean-architecture/internal/infrastructure/repo
+              desc: API handlers must not import repository implementations; call a use case instead.
+            - pkg: github.com/olx-india/go-service-template-clean-architecture/server
+              desc: API handlers must not import the server composition root.
     dupl:
       threshold: 100
     errcheck:

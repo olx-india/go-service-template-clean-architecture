@@ -55,4 +55,4 @@ These are documented in [EXTENDING.md](../EXTENDING.md).
 
 - Adopters must implement persistence and business rules themselves
 - The template stays small and easy to understand
-- Correct dependency direction is enforced by example (DTO mapping stays in handlers)
+- Correct dependency direction is enforced by `depguard` during linting and CI
