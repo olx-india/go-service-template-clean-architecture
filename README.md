@@ -16,7 +16,7 @@ A small **Go microservice template** built on Clean Architecture: Gin HTTP serve
 
 ![Go Service Template: Clean Architecture](docs/assets/social-preview.png)
 
-<!-- TODO: add docs/assets/demo.gif — make compose-up → Swagger UI → Jaeger trace -->
+![Demo: run the stack, call an API, and find its trace](docs/assets/demo.gif)
 
 It's a **scaffold**, not a finished product: the layers, wiring, tooling and probes are done, and the sample endpoints show where your business logic goes.
 
